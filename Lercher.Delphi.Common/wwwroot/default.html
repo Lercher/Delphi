@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/globalize/0.1.1/globalize.min.js"></script>
+    <script type="text/javascript" src="http://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn3.devexpress.com/jslib/15.2.4/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="http://cdn3.devexpress.com/jslib/15.2.4/css/dx.light.compact.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        th, td {
+            border-bottom: 1px solid #EEE;
+            border-right: 3px solid #DDD;
+            padding: 0px 5px 0px 5px;
+        }
+
+        th {
+            border-bottom: 2px solid #000;
+        }
+
+        td {
+            border-bottom: 1px solid #EEE;
+            vertical-align: text-top;
+        }
+
+        body {
+            /* HACK: http://stackoverflow.com/questions/24029359/horizontal-scrollbar-appearing-row-having-negative-margin */
+            overflow-x: hidden;
+        }
+    </style>
+    <script src="js/delphi.js"></script>
+    <title>Delphi - an oracle for data</title>
+</head>
+<!-- http://www.layoutit.com/ -->
+
+<body ng-app="delphiApp" ng-controller="delphi">
+
+    <div class="container-fluid">
+        <div class="row">
+
+
+            <div class="col-md-10">
+                <pre ng-show="error" ng-bind="error"></pre>
+
+                <div class="row" ng-show="displaymetadata">
+
+                    <div class="col-md-6" ng-show="oracle.links">
+                        <h3>{{oracle.table}} &ndash; Outgoing Links</h3>
+                        <table>
+                            <tr>
+                                <th>My key(s)</th>
+                                <th>&#10140; Destination</th>
+                                <th>Target key(s)</th>
+                                <th>FK Name</th>
+                            </tr>
+                            <tr ng-repeat="(n, r) in oracle.links">
+                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
+                                <td>&#10140; <a href="#" ng-click="show.tabledata(r.destination);" ng-bind="r.destination"></a></td>
+                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
+                                <td ng-bind="n" style="font-size: 66%;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6" ng-show="oracle.metadata">
+                        <h3>{{oracle.table}} &ndash; Incoming Links</h3>
+                        <table>
+                            <tr>
+                                <th>My key(s)</th>
+                                <th>&#9664; Details Table</th>
+                                <th>Details key(s)</th>
+                                <th>FK Name</th>
+                            </tr>
+                            <tr ng-repeat="(n, r) in oracle.details">
+                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
+                                <td>&#9664; <a href="#" ng-click="show.tabledata(r.source);" ng-bind="r.source"></a></td>
+                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
+                                <td ng-bind="n" style="font-size: 66%;"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <!--<pre ng-show="oracle.metadata" ng-bind="oracle.metadata|json"></pre>-->
+                    <!-- Note: currently we support even overlapping columns in FK Links, e.g. AAGRVE and FACTURE have some -->
+                    <div class="col-md-12" ng-show="oracle.values" ng-switch="oracle.values.length === 1">
+
+                        <div class="row" ng-switch-when="true" ng-repeat="r in oracle.values">
+                            <!-- single item -->
+                            <div class="col-md-6">
+                                <h3>{{oracle.table}} &ndash; One Item Data</h3>
+                                <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+                                <p>
+                                    <label>Find:</label>&nbsp;<input ng-model="filter.column" />
+                                </p>
+                                <table>
+                                    <tr>
+                                        <th>PK</th>
+                                        <th>Column name</th>
+                                        <th>Value</th>
+                                        <th>Link</th>
+                                    </tr>
+                                    <tr ng-repeat="(n, v) in r" ng-switch="isLink(n, v)" ng-show="n.toLowerCase().indexOf(filter.column||'')>=0">
+                                        <td>
+                                            <span ng-show="oracle.pk.indexOf(n)>=0">&#10140;</span>
+                                        </td>
+                                        <td style="vertical-align: top;">
+                                            <div ng-bind="n"></div>
+                                            <div style="font-size: 66%;" ng-bind="descriptionOf(n)"></div>
+                                        </td>
+                                        <td ng-bind="v"></td>
+                                        <td>
+                                            <div ng-switch-when="true" ng-repeat="fk in linksof(n)" style="font-size: 66%;">
+                                                <a href="#" title="{{fk.key}}" ng-click="navigateto(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
+                                            </div>
+                                        </td>                                        
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Details</h3>
+                                <ol>
+                                    <li ng-repeat="(n, fk) in oracle.details">
+                                        <a href="#" ng-click="navigateto(r, fk, 'back');">&#9664;&nbsp;{{fk.source}}</a>
+                                        ({{n}})
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-switch-when="false"  style="overflow-x: auto;">
+                            <!-- an array of items -->
+                            <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; at a max. of 5000 rows</h3>
+                            <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+                            <p>
+                                <i>PK</i><span ng-repeat="c in oracle.pk"> &ndash; {{c}}</span>
+                            </p>
+
+                            <!--
+                                https://www.devexpress.com/Support/Center/Question/Details/T191990 Using Angular Templtes for columns
+                                https://www.devexpress.com/Support/Center/Question/Details/T199868 Cell Templates 
+                                https://www.devexpress.com/Support/Center/Question/Details/T288087 Row Templates
+                                http://js.devexpress.com/Documentation/Guide/UI_Widgets/UI_Widget_Categories/Collection_Container_Widgets/?version=15_1#UI_Widgets_UI_Widget_Categories_Collection_Container_Widgets_Common_Tasks_Customize_an_Item_Appearance_Specify_a_Template Specify a template
+                            -->
+                            <div style="margin: 0 auto" dx-data-grid="gridSettings">
+                            </div>
+
+
+                            <p>
+                                <label>Find:</label>&nbsp;<input ng-model="filter.table" />
+                                <label>Limit to:</label>&nbsp;<input ng-model="filter.limit" type="number" />
+                            </p>
+                            <table>
+                                <tr>
+                                    <th></th>
+                                    <th ng-repeat="(n, v) in oracle.values[0]" title="{{descriptionOf(n)}}">{{n}}</th>
+                                </tr>
+                                <tr ng-repeat="r in oracle.values | filter: filter.table | limitTo: filter.limit">
+                                    <td><a href="#" ng-click="open(r)">{{$index+1}}&#10140;</a></td>
+                                    <td ng-repeat="(n, v) in r" ng-switch="isLink(n, v)">
+                                        <div ng-switch-when="true" ng-bind="v"></div>
+                                        <div ng-switch-when="true" ng-repeat="fk in linksof(n)" style="font-size: 66%;">
+                                            <a href="#" title="{{fk.key}}" ng-click="navigateto(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
+                                        </div>
+                                        <span ng-switch-when="false" ng-bind="v"></span>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <h3>{{oracle.table}}</h3>
+
+                <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+
+                <p>
+                    <input type="checkbox" ng-model="displaymetadata" /> <label>Show Relations/Links</label>
+                </p>
+
+                <form>
+                    <p>
+                        <label>Oracle Owner</label>
+                        <input ng-model="oracle.owner" />
+                        <input type="submit" class="btn btn-primary" ng-click="show.tables()" value="Show" />
+                    </p>
+                </form>
+
+                <p>
+                    <i>Try TRREADY45, TRIALDEV, HR, Lercher, Sys, System</i>
+                </p>
+
+                <p>
+                    <label>Filter:</label>&nbsp;<input ng-model="filter.tables" />
+                </p>
+
+                <ol>
+                    <li ng-repeat="t in tables | filter: filter.tables">
+                        <div>
+                            <a href="#" ng-click="show.tabledata(t.NAME);">{{t.NAME}}</a>
+                        </div>
+                        <div ng-bind="t.DESCRIPTION" style="font-size: 66%;"></div>
+                    </li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
