@@ -187,6 +187,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wwwroot\multipleitemTable.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wwwroot\multipleitemDxgrid.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\singleitemDetailtables.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

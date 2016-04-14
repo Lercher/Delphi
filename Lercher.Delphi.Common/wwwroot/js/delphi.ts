@@ -141,3 +141,19 @@ mod.directive("singleitemDetailtables", function () {
     }
 });
 
+mod.directive("multipleitemDxgrid", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "multipleitemDxgrid.html"
+    }
+});
+
+mod.directive("multipleitemTable", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "multipleitemTable.html"
+    }
+});
+
