@@ -29,7 +29,8 @@ where owner=<p><%= owner %></p> and TABLE_NAME=<p><%= tablename %></p>
                 <x>
 SELECT c_src.COLUMN_NAME
 FROM ALL_CONSTRAINTS c_list
-INNER JOIN ALL_CONS_COLUMNS c_src ON c_list.CONSTRAINT_NAME = c_src.CONSTRAINT_NAME
+INNER JOIN ALL_CONS_COLUMNS c_src 
+ON c_list.CONSTRAINT_NAME = c_src.CONSTRAINT_NAME AND c_list.OWNER = c_src.OWNER
 WHERE c_list.CONSTRAINT_TYPE = 'P'
 AND c_list.OWNER = <p><%= owner %></p> AND c_list.TABLE_NAME = <p><%= tablename %></p>
 ORDER BY c_src.POSITION
