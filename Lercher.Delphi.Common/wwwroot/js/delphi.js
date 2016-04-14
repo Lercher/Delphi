@@ -90,10 +90,17 @@ mod.controller("delphi", function ($scope, $http) {
         };
     }
 });
-angular.module("delphiApp").directive("outgoingLinks", function () {
+mod.directive("outgoingLinks", function () {
     return {
         restrict: "E",
         replace: true,
         templateUrl: "outgoingLinks.html"
+    };
+});
+mod.directive("incomingLinks", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "incomingLinks.html"
     };
 });
