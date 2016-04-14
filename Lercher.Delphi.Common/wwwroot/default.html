@@ -38,17 +38,18 @@
 <!-- http://www.layoutit.com/ -->
 
 <body ng-app="delphiApp" ng-controller="delphi">
-
     <div class="container-fluid">
         <div class="row">
-
-
             <div class="col-md-10">
                 <pre ng-show="error" ng-bind="error"></pre>
 
                 <div class="row" ng-show="displaymetadata">
-                    <outgoing-links></outgoing-links>
-                    <incoming-links></incoming-links>
+                    <div class="col-md-6">
+                        <outgoing-links></outgoing-links>
+                    </div>
+                    <div class="col-md-6">
+                        <incoming-links></incoming-links>
+                    </div>
                 </div>
 
                 <div class="row">
