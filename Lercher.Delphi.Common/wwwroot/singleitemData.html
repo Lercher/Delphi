@@ -1,0 +1,30 @@
+﻿<div>
+    <h3>{{oracle.table}} Single Item &ndash; Data</h3>
+    <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+    <p>
+        <label>Find:</label>&nbsp;<input ng-model="filter.column" />
+    </p>
+    <table>
+        <tr>
+            <th>PK</th>
+            <th>Column name</th>
+            <th>Value</th>
+            <th>Link</th>
+        </tr>
+        <tr ng-repeat="(n, v) in r" ng-switch="isLink(n, v)" ng-show="n.toLowerCase().indexOf(filter.column||'')>=0">
+            <td>
+                <span ng-show="oracle.pk.indexOf(n)>=0">&#10140;</span>
+            </td>
+            <td style="vertical-align: top;">
+                <div ng-bind="n"></div>
+                <div style="font-size: 66%;" ng-bind="descriptionOf(n)"></div>
+            </td>
+            <td ng-bind="v"></td>
+            <td>
+                <div ng-switch-when="true" ng-repeat="fk in linksof(n)" style="font-size: 66%;">
+                    <a href="#" title="{{fk.key}}" ng-click="navigateto(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

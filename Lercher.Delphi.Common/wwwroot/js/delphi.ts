@@ -124,3 +124,20 @@ mod.directive("listOfTables", function () {
         templateUrl: "listOfTables.html"
     }
 });
+
+mod.directive("singleitemData", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "singleitemData.html"
+    }
+});
+
+mod.directive("singleitemDetailtables", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "singleitemDetailtables.html"
+    }
+});
+

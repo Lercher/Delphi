@@ -1,0 +1,12 @@
+﻿<div>
+    <h3>{{oracle.table}} Single Item &ndash; Detail Tables</h3>
+    <ol>
+        <li ng-repeat="(n, fk) in oracle.details">
+            <a href="#" ng-click="navigateto(r, fk, 'back');">&#9664;&nbsp;{{fk.source}}</a>
+            ({{n}})
+        </li>
+    </ol>
+    <p>
+        &ndash; End of list &ndash;
+    </p>
+</div>
