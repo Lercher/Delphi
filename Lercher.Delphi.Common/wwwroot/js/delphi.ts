@@ -7,8 +7,8 @@ declare var $: any;
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
-var app = angular.module("delphiApp", ['dx']);
-app.controller("delphi", function ($scope, $http) {
+var mod = angular.module("delphiApp", ['dx']);
+mod.controller("delphi", function ($scope, $http) {
     $scope.filter = { limit: 15 };
     $scope.show = { tables: show_tables, tabledata: show_tabledata };
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
@@ -98,5 +98,13 @@ app.controller("delphi", function ($scope, $http) {
             searchPanel: { visible: true },
             selection: { mode: 'single' }
         }
+    }
+});
+
+angular.module("delphiApp").directive("outgoingLinks", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "outgoingLinks.html"
     }
 });

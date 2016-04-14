@@ -1,0 +1,17 @@
+﻿<div class="col-md-6" ng-show="oracle.links">
+    <h3>{{oracle.table}} &ndash; Outgoing Links</h3>
+    <table>
+        <tr>
+            <th>My key(s)</th>
+            <th>&#10140; Destination</th>
+            <th>Target key(s)</th>
+            <th>FK Name</th>
+        </tr>
+        <tr ng-repeat="(n, r) in oracle.links">
+            <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
+            <td>&#10140; <a href="#" ng-click="show.tabledata(r.destination);" ng-bind="r.destination"></a></td>
+            <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
+            <td ng-bind="n" style="font-size: 66%;"></td>
+        </tr>
+    </table>
+</div>

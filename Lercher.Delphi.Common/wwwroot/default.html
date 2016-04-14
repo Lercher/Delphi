@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/globalize/0.1.1/globalize.min.js"></script>
     <script type="text/javascript" src="http://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
@@ -48,41 +48,26 @@
 
                 <div class="row" ng-show="displaymetadata">
 
-                    <div class="col-md-6" ng-show="oracle.links">
-                        <h3>{{oracle.table}} &ndash; Outgoing Links</h3>
-                        <table>
-                            <tr>
-                                <th>My key(s)</th>
-                                <th>&#10140; Destination</th>
-                                <th>Target key(s)</th>
-                                <th>FK Name</th>
-                            </tr>
-                            <tr ng-repeat="(n, r) in oracle.links">
-                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
-                                <td>&#10140; <a href="#" ng-click="show.tabledata(r.destination);" ng-bind="r.destination"></a></td>
-                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
-                                <td ng-bind="n" style="font-size: 66%;"></td>
-                            </tr>
-                        </table>
+                    <outgoing-links></outgoing-links>
+
+                        <div class="col-md-6" ng-show="oracle.metadata">
+                            <h3>{{oracle.table}} &ndash; Incoming Links</h3>
+                            <table>
+                                <tr>
+                                    <th>My key(s)</th>
+                                    <th>&#9664; Details Table</th>
+                                    <th>Details key(s)</th>
+                                    <th>FK Name</th>
+                                </tr>
+                                <tr ng-repeat="(n, r) in oracle.details">
+                                    <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
+                                    <td>&#9664; <a href="#" ng-click="show.tabledata(r.source);" ng-bind="r.source"></a></td>
+                                    <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
+                                    <td ng-bind="n" style="font-size: 66%;"></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="col-md-6" ng-show="oracle.metadata">
-                        <h3>{{oracle.table}} &ndash; Incoming Links</h3>
-                        <table>
-                            <tr>
-                                <th>My key(s)</th>
-                                <th>&#9664; Details Table</th>
-                                <th>Details key(s)</th>
-                                <th>FK Name</th>
-                            </tr>
-                            <tr ng-repeat="(n, r) in oracle.details">
-                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
-                                <td>&#9664; <a href="#" ng-click="show.tabledata(r.source);" ng-bind="r.source"></a></td>
-                                <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
-                                <td ng-bind="n" style="font-size: 66%;"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
 
                 <div class="row">
 
@@ -138,7 +123,7 @@
                             <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; at a max. of 5000 rows</h3>
                             <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
                             <p>
-                                <i>PK</i><span ng-repeat="c in oracle.pk"> &ndash; {{c}}</span>
+                                <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
                             </p>
 
                             <!--
