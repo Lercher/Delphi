@@ -147,38 +147,7 @@
             </div>
 
             <div class="col-md-2">
-                <h3>{{oracle.table}}</h3>
-
-                <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
-
-                <p>
-                    <input type="checkbox" ng-model="displaymetadata" /> <label>Show Relations/Links</label>
-                </p>
-
-                <form>
-                    <p>
-                        <label>Oracle Owner</label>
-                        <input ng-model="oracle.owner" />
-                        <input type="submit" class="btn btn-primary" ng-click="show.tables()" value="Show" />
-                    </p>
-                </form>
-
-                <p>
-                    <i>Try TRREADY45, TRIALDEV, HR, Lercher, Sys, System</i>
-                </p>
-
-                <p>
-                    <label>Filter:</label>&nbsp;<input ng-model="filter.tables" />
-                </p>
-
-                <ol>
-                    <li ng-repeat="t in tables | filter: filter.tables">
-                        <div>
-                            <a href="#" ng-click="show.tabledata(t.NAME);">{{t.NAME}}</a>
-                        </div>
-                        <div ng-bind="t.DESCRIPTION" style="font-size: 66%;"></div>
-                    </li>
-                </ol>
+                <list-of-tables></list-of-tables>
             </div>
 
         </div>

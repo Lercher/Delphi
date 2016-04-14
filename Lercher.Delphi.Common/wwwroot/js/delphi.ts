@@ -116,3 +116,11 @@ mod.directive("incomingLinks", function () {
         templateUrl: "incomingLinks.html"
     }
 });
+
+mod.directive("listOfTables", function () {
+    return {
+        restrict: "E",
+        replace: true,
+        templateUrl: "listOfTables.html"
+    }
+});
