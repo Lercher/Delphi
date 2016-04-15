@@ -50,9 +50,33 @@ mod.controller("delphi", function ($scope, $http, $location) {
     $scope.isLink = (c, v) => v && ($scope.linksof(c) !== []);
     $scope.gridSettings = getGridSettings("oracle.values");
 
+    $scope.$on('$locationChangeSuccess', function () {
+        console.log("$locationChangeSuccess -> " + $location.url());
+        var path : string = $location.path();
+        var hash : string = $location.hash();
+        if (hash === "pk") {
+            // TODO - single item display is not a database query yet
+        } else if (path && hash && hash.indexOf(".") > 0) {
+            var fkdir = hash.split(".", 2);
+            var body: LINK = {
+                key: fkdir[0],
+                pk: objectToKvArray($location.search()),
+                direction: fkdir[1]
+            }
+            show_tabledata(path, body);
+        } else if (path) {
+            show_tabledata(path);
+        } else if (!path) {
+            // OK this is the start URL
+        } else {
+            $scope.error = "URL error: unrecognizable URL path " + $location.url();
+        }
+    });
+
     function show_restrict(r) {
         $scope.oracle.values = [r];
         var pk = buildPK(r);
+        $location.path($scope.oracle.table);
         $location.search(kvArrayToObject(pk));
         $location.hash("pk");
         console.log($location.url());
@@ -77,7 +101,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
         return pk;
     }
 
-    function kvArrayToObject(kv: Array<KV>): Object {
+    function kvArrayToObject(kv: Array<KV>) : Object {
         var r = {};
         for (var i = 0; i < kv.length; i++) {
             r[kv[i].key] = kv[i].value;
@@ -85,11 +109,20 @@ mod.controller("delphi", function ($scope, $http, $location) {
         return r;
     }
 
+    function objectToKvArray(o: Object): Array<KV> {
+        var r: Array<KV> = [];
+        for (var k in o) {
+            if (o.hasOwnProperty(k))
+                r.push({ key: k, value: o[k] });
+        }
+        return r;
+    }
+
     // --- REST service calls
     var url = { tables: "api/tables/", tabledata: "api/table/", tablemetadata: "api/tablemetadata/" };
 
-    function show_tabledata(tablename : string, body : LINK) {
-        $location.path("/" + tablename); // /table as PATH
+    function show_tabledata(tablename : string, body : LINK = undefined) {
+        $location.path(tablename); // table as PATH
         if (body) {
             $location.hash(body.key + '.' + body.direction); // foreign key constraint name + . + forward/back/pk as HASH
             $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
@@ -98,6 +131,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             $http.post(url.tabledata + $scope.oracle.owner + "/" + tablename, body).error(error)
                 .success(data => { $scope.oracle = data; $scope.error = null; });
         } else {
+            $location.hash(undefined);
             $location.search({});
             console.log($location.url());
             $scope.error = "loading data for " + tablename + " ...";
