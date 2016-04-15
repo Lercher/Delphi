@@ -8,15 +8,21 @@ declare var $: any;
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
 var mod = angular.module("delphiApp", ['dx']);
-mod.controller("delphi", function ($scope, $http) {
+mod.controller("delphi", function ($scope, $http, $location) {
     $scope.filter = { limit: 15 };
-    $scope.show = { tables: show_tables, tabledata: show_tabledata };
+    $scope.show = {
+        // only these function modify the $location
+        tables: show_tables,
+        tabledata: show_tabledata,
+        follow: show_follow,
+        restrict: show_restrict
+    };
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
-    var url = { tables: "api/tables/", tabledata: "api/table/", tablemetadata: "api/tablemetadata/" };
     $scope.oracle = { owner: "TRREADY45" };
     $scope.error = null;
     $scope.tables = [];
     $scope.gridSettings = {};
+    $scope.location = $location;
 
     $scope.descriptionOf = c => {
         var ar = $scope.oracle.columns;
@@ -42,18 +48,28 @@ mod.controller("delphi", function ($scope, $http) {
         return r;
     };
     $scope.isLink = (c, v) => v && ($scope.linksof(c) !== []);
-    $scope.navigateto = (r, fk, direction) => {
+    $scope.gridSettings = getGridSettings("oracle.values");
+
+    function show_restrict(r) {
+        $scope.oracle.values = [r];
+        var pk = buildPK(r);
+        $location.search(kvArrayToObject(pk));
+        $location.hash("pk");
+        console.log($location.url());
+    }
+
+    function show_follow(r, fk, direction) {
         // alert("Show the one " + fk.destination + " where " + fk.matchcolumn[0].dest + " = " + r[fk.matchcolumn[0].src] + " ... by " + fk.key + " with " + fk.matchcolumn.length + " match(es))");
         var body = { key: fk.key, pk: buildPK(r), direction: direction };
         show_tabledata($scope.oracle.table, body);
-    };
-    $scope.open = r => $scope.oracle.values = [r];
+    }
 
-    $scope.gridSettings = getGridSettings("oracle.values");
+    interface LINK { key: string, pk: Array<KV>, direction: string };
+    interface KV { key: string, value: any };
 
-    function buildPK(r) {
+    function buildPK(r : Object) : Array<KV> {
         var pks = $scope.oracle.pk;
-        var pk = [];
+        var pk : Array<KV> = [];
         for (var i = 0; i < pks.length; i++) {
             var v = r[pks[i]];
             pk.push({ key: pks[i], value: v });
@@ -61,14 +77,31 @@ mod.controller("delphi", function ($scope, $http) {
         return pk;
     }
 
-    function show_tabledata(t, body) {
+    function kvArrayToObject(kv: Array<KV>): Object {
+        var r = {};
+        for (var i = 0; i < kv.length; i++) {
+            r[kv[i].key] = kv[i].value;
+        }
+        return r;
+    }
+
+    // --- REST service calls
+    var url = { tables: "api/tables/", tabledata: "api/table/", tablemetadata: "api/tablemetadata/" };
+
+    function show_tabledata(tablename : string, body : LINK) {
+        $location.path("/" + tablename); // /table as PATH
         if (body) {
-            $scope.error = "following a link, loading data for " + t + " ...";
-            $http.post(url.tabledata + $scope.oracle.owner + "/" + t, body).error(error)
+            $location.hash(body.key + '.' + body.direction); // foreign key constraint name + . + forward/back/pk as HASH
+            $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
+            console.log($location.url());
+            $scope.error = "following a link, loading data for " + tablename + " ...";
+            $http.post(url.tabledata + $scope.oracle.owner + "/" + tablename, body).error(error)
                 .success(data => { $scope.oracle = data; $scope.error = null; });
         } else {
-            $scope.error = "loading data for " + t + " ...";
-            $http.get(url.tabledata + $scope.oracle.owner + "/" + t).error(error)
+            $location.search({});
+            console.log($location.url());
+            $scope.error = "loading data for " + tablename + " ...";
+            $http.get(url.tabledata + $scope.oracle.owner + "/" + tablename).error(error)
                 .success(data => { $scope.oracle = data; $scope.error = null; });
         }
     }
@@ -85,6 +118,7 @@ mod.controller("delphi", function ($scope, $http) {
         $scope.error = data.ExceptionMessage || data.Message || data;
     }
 
+    // for the DX grid only
     function getGridSettings(dsref) {
         return {
             bindingOptions: { dataSource: dsref },

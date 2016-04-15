@@ -31,6 +31,17 @@
             /* HACK: http://stackoverflow.com/questions/24029359/horizontal-scrollbar-appearing-row-having-negative-margin */
             overflow-x: hidden;
         }
+
+        a {
+            cursor: pointer; /* a hand, even without an href */
+        }
+
+        footer {
+            margin-top: 6ex;
+            padding: 1ex;
+            background-color: lightgray;
+            font-size: small;
+        }
     </style>
     <script src="js/delphi.js"></script>
     <title>Delphi - an oracle for data</title>
@@ -68,7 +79,7 @@
                             </div>
                         </div>
 
-                        <div class="row" ng-switch-when="false"  style="overflow-x: auto;">
+                        <div class="row" ng-switch-when="false" style="overflow-x: auto;">
                             <!-- an array of items -->
                             <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; at a max. of 5000 rows</h3>
                             <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
@@ -83,6 +94,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="col-md-2">
@@ -92,5 +104,15 @@
         </div>
     </div>
 
+    <footer>
+        see
+        <a target="_blank" href="https://github.com/lercher/delphi">this project at GitHub</a>
+        |
+        <a target="_blank" href="https://angularjs.org/">AngularJS</a>
+        |
+        <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a>
+        |
+        and <a target="_blank" href="http://www.asp.net/web-api">Web API</a> at the backend
+    </footer>
 </body>
 </html>

@@ -28,7 +28,7 @@
     <ol>
         <li ng-repeat="t in tables | filter: filter.tables">
             <div>
-                <a href="#" ng-click="show.tabledata(t.NAME);">{{t.NAME}}</a>
+                <a ng-click="show.tabledata(t.NAME);">{{t.NAME}}</a>
             </div>
             <div ng-bind="t.DESCRIPTION" style="font-size: 66%;" ng-show="t.DESCRIPTION != '==='"></div>
         </li>

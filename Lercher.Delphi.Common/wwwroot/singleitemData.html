@@ -22,7 +22,7 @@
             <td ng-bind="v"></td>
             <td>
                 <div ng-switch-when="true" ng-repeat="fk in linksof(n)" style="font-size: 66%;">
-                    <a href="#" title="{{fk.key}}" ng-click="navigateto(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
+                    <a title="{{fk.key}}" ng-click="show.follow(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
                 </div>
             </td>
         </tr>
