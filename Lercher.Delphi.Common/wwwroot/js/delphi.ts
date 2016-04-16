@@ -54,7 +54,13 @@ mod.controller("delphi", function ($scope, $http, $location) {
         console.log("$locationChangeSuccess -> " + $location.url());
         var path : string = $location.path();
         var hash : string = $location.hash();
-        if (hash === "pk") {
+        if (path && hash === "pk") {
+            var body: LINK = {
+                key: "", 
+                pk: objectToKvArray($location.search()),
+                direction: "pk"
+            };
+            show_tabledata(path, body);
             // TODO - single item display is not a database query yet
         } else if (path && hash && hash.indexOf(".") > 0) {
             var fkdir = hash.split(".", 2);
@@ -124,7 +130,8 @@ mod.controller("delphi", function ($scope, $http, $location) {
     function show_tabledata(tablename : string, body : LINK = undefined) {
         $location.path(tablename); // table as PATH
         if (body) {
-            $location.hash(body.key + '.' + body.direction); // foreign key constraint name + . + forward/back/pk as HASH
+            var hash = body.key ? body.key + '.' + body.direction : body.direction;
+            $location.hash(hash); // foreign key constraint name + . + forward/back or pk as HASH
             $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
             console.log($location.url());
             $scope.error = "following a link, loading data for " + tablename + " ...";
