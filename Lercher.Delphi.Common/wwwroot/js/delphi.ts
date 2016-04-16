@@ -23,6 +23,8 @@ mod.controller("delphi", function ($scope, $http, $location) {
     $scope.tables = [];
     $scope.gridSettings = {};
     $scope.location = $location;
+    $scope.displaygrid = true;
+    $scope.displaymetadata = false;
 
     $scope.descriptionOf = c => {
         var ar = $scope.oracle.columns;

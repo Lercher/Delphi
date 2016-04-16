@@ -8,7 +8,7 @@
             <th></th>
             <th ng-repeat="(n, v) in oracle.values[0]" title="{{descriptionOf(n)}}">{{n}}</th>
         </tr>
-        <tr ng-repeat="r in oracle.values | filter: filter.table | limitTo: filter.limit">
+        <tr ng-repeat="r in oracle.values | filter: filter.table | limitTo: displaygrid ? 0 : filter.limit">
             <td><a ng-click="show.restrict(r)">{{$index+1}}&#10140;</a></td>
             <td ng-repeat="(n, v) in r" ng-switch="isLink(n, v)">
                 <div ng-switch-when="true" ng-bind="v"></div>

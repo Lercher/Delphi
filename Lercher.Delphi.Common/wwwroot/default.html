@@ -87,9 +87,8 @@
                                 <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
                             </p>
 
-                            <multipleitem-dxgrid></multipleitem-dxgrid>
-
-                            <multipleitem-table></multipleitem-table>
+                            <multipleitem-dxgrid ng-show="displaygrid"></multipleitem-dxgrid>
+                            <multipleitem-table ng-hide="displaygrid"></multipleitem-table>
 
                         </div>
                     </div>

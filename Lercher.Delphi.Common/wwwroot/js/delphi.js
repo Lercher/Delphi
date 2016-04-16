@@ -19,6 +19,8 @@ mod.controller("delphi", function ($scope, $http, $location) {
     $scope.tables = [];
     $scope.gridSettings = {};
     $scope.location = $location;
+    $scope.displaygrid = true;
+    $scope.displaymetadata = false;
     $scope.descriptionOf = function (c) {
         var ar = $scope.oracle.columns;
         for (var i = 0; i < ar.length; i++) {
