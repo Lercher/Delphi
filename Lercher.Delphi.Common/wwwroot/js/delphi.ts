@@ -140,7 +140,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             $http.post(url.tabledata + $scope.oracle.owner + "/" + tablename, body).error(error)
                 .success(data => { $scope.oracle = data; $scope.error = null; });
         } else {
-            $location.hash(undefined);
+            $location.hash(null);
             $location.search({});
             console.log($location.url());
             $scope.error = "loading data for " + tablename + " ...";
