@@ -1,6 +1,7 @@
 Imports System.Web.Http
 Imports Newtonsoft.Json.Linq
 
+
 Public Class TableController
     Inherits BaseController
 
@@ -16,11 +17,13 @@ Public Class TableController
         Return Delphi.TableData.FollowFK(owner:=id, tablename:=id2, fkname:=link.key, pk:=link.pk, isForwardDirection:=isForwardDirection)
     End Function
 
+    #Disable Warning S2365 ' Properties should not be based on arrays - OK because LinkDef/pk is just a WebApi parameter object
     Public Class LinkDef
         Public Property direction As String
         Public Property key As String
         Public Property pk As PKDef()
     End Class
+    #Enable Warning S2365 ' Properties should not be based on arrays
 
     Public Class PKDef
         Public Property key As String

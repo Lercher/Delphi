@@ -128,6 +128,7 @@ Namespace Delphi
             Public Property destcolumn as String
         End Class
 
+        #Disable Warning S2365 ' Properties should not be based on arrays - OK because RichtableDescription/pk is just a WebApi parameter object
         Public Class RichtableDescription
             Public Property owner As String
             Public Property table As String
@@ -138,5 +139,7 @@ Namespace Delphi
             Public Property details As New JObject
             Public Property pk as string()
         End Class
+        #Enable Warning S2365 ' Properties should not be based on arrays
+
     End Class
 End Namespace
