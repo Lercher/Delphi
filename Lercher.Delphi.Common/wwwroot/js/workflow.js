@@ -6,6 +6,15 @@
 var mod = angular.module("delphiApp", ['dx']);
 mod.controller("workflow", function ($scope, $http, $location) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
+    $scope.languages = [];
+    $scope.targets = [];
+    $scope.oracle = {
+        owner: null,
+        language: null,
+        target: null
+    };
+    // --- REST service calls
+    var url = { values: "api/values/" };
     $scope.set = function (property, val) {
         var search = $location.search();
         search[property] = val;
@@ -14,33 +23,29 @@ mod.controller("workflow", function ($scope, $http, $location) {
     };
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
-        var path = $location.path();
+        var path = $location.path().replace("/", "") || "TRREADY45";
         var hash = $location.hash();
         var search = $location.search();
-        $scope.oracle = {
-            owner: path.replace("/", "") || "TRREADY45",
-            language: search.language || "EN",
-            target: search.target || "DOSSIER"
-        };
-        $scope.languages = [];
-        $scope.targets = [];
+        $scope.oracle.language = search.language || "EN";
+        $scope.oracle.target = search.target || "DOSSIER";
         $scope.errors = [];
-        show("languages");
-        show("targets");
+        $scope.closederrors = 0;
+        if ($scope.oracle.owner !== path) {
+            $scope.oracle.owner = path;
+            show("languages");
+            show("targets");
+        }
     });
     function notice(s) {
         $scope.errors.push(s);
     }
-    // --- REST service calls
-    var url = { values: "api/values/" };
     function show(s) {
         notice("loading " + s + " ...");
-        $scope.languages = [];
+        $scope[s] = [];
         $http.get(url.values + $scope.oracle.owner + "/" + s).error(error)
-            .success(function (data) { $scope[s] = data; });
+            .success(function (data) { $scope[s] = data; $scope.closederrors++; });
     }
     function error(data) {
         notice(data.ExceptionMessage || data.Message || data);
     }
-    // startup code
 });

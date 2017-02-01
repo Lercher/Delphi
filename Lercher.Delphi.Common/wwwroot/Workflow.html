@@ -51,7 +51,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <div ng-repeat="e in errors">{{e}}</div>
+                <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
                 <h3>{{oracle.target}} Workflow in {{oracle.owner}} ({{oracle.language}})</h3>
             </div>
 
