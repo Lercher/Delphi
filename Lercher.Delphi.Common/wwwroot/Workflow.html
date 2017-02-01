@@ -42,6 +42,36 @@
             background-color: lightgray;
             font-size: small;
         }
+
+        div.phase {
+            border: medium solid gray;
+            border-radius: 1em;
+            margin: 1em 1em 1em 1em;
+            padding: 1em 1em 1em 1em;
+            width: 20em;
+            min-height: 20em;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        div.u {
+            text-align: center;
+            font-size: 120%;
+            font-weight: bold;
+            padding-bottom: 1em;
+            margin-bottom: 1em;
+            border-bottom: medium solid gray;
+        }
+
+        div.phase span {
+            padding: 0.2ex 0.2ex 0.2ex 0.2ex;
+            display:  block;
+            width: auto;
+        }
+
+        .internal, .internal0 {
+            opacity: 0.5;
+        }
     </style>
     <script src="js/workflow.js"></script>
     <title>Delphi Workflows - an oracle for data</title>
@@ -53,6 +83,10 @@
             <div class="col-md-10">
                 <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
                 <h3>{{oracle.target}} Workflow in {{oracle.owner}} ({{oracle.language}})</h3>
+                <div ng-repeat="p in workflow.phases" class="phase">
+                    <div class="u">{{p.order}}:{{p.phase}} &ndash; {{p.label}}</div>
+                    <span ng-repeat="s in p.steps track by $index" class="internal{{s.internal}}">{{$index}}:{{s.step}} &ndash; {{s.label}}</span>
+                </div>
             </div>
 
             <div class="col-md-2">

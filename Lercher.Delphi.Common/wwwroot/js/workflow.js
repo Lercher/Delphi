@@ -13,8 +13,9 @@ mod.controller("workflow", function ($scope, $http, $location) {
         language: null,
         target: null
     };
+    $scope.workflow = {};
     // --- REST service calls
-    var url = { values: "api/values/" };
+    var url = { values: "api/values/", workflow: "api/workflow/" };
     $scope.set = function (property, val) {
         var search = $location.search();
         search[property] = val;
@@ -35,6 +36,7 @@ mod.controller("workflow", function ($scope, $http, $location) {
             show("languages");
             show("targets");
         }
+        show_workflow($scope.oracle.target, $scope.oracle.language);
     });
     function notice(s) {
         $scope.errors.push(s);
@@ -44,6 +46,38 @@ mod.controller("workflow", function ($scope, $http, $location) {
         $scope[s] = [];
         $http.get(url.values + $scope.oracle.owner + "/" + s).error(error)
             .success(function (data) { $scope[s] = data; $scope.closederrors++; });
+    }
+    function show_workflow(target, language) {
+        notice("loading workflow " + target + "/" + language + " ...");
+        $scope.workflow = {};
+        $http.get(url.workflow + $scope.oracle.owner + "/" + target, { params: { language: language } }).error(error)
+            .success(function (data) { $scope.workflow = denormalize(data); $scope.closederrors++; });
+        function denormalize(wf) {
+            // convert the array steps to an associative array:
+            var ar = wf.steps;
+            wf.steps = {};
+            for (var s = 0; s < ar.length; s++)
+                wf.steps[ar[s].step] = ar[s];
+            // assign a steps array to each phase:
+            for (var p = 0; p < wf.phases.length; p++) {
+                var phase = wf.phases[p];
+                phase.steps = stepsof(wf, phase);
+            }
+            return wf;
+        }
+        function stepsof(wf, p) {
+            var result = [];
+            function lookup(s) {
+                var uk = { step: s, internal: 0, label: "(unknown)" };
+                return wf.steps[s] || uk;
+            }
+            var rel = wf.relations;
+            for (var r = 0; r < rel.length; r++)
+                if (p.phase === rel[r].phase)
+                    result.push(lookup(rel[r].step));
+            return result;
+        }
+        ;
     }
     function error(data) {
         notice(data.ExceptionMessage || data.Message || data);

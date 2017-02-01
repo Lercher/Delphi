@@ -139,6 +139,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\WorkflowController.vb" />
     <Compile Include="Controller\ValuesController.vb" />
     <Compile Include="Controller\TableController.vb" />
     <Compile Include="Controller\TablemetadataController.vb" />
