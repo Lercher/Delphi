@@ -10,7 +10,7 @@
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.common.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.light.compact.css" />
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <style type="text/css">
         th, td {
             border-bottom: 1px solid #EEE;
@@ -43,63 +43,40 @@
             font-size: small;
         }
     </style>
-    <script src="js/delphi.js"></script>
-    <title>Delphi - an oracle for data</title>
+    <script src="js/workflow.js"></script>
+    <title>Delphi Workflows - an oracle for data</title>
 </head>
-<!-- http://www.layoutit.com/ -->
 
-<body ng-app="delphiApp" ng-controller="delphi">
+<body ng-app="delphiApp" ng-controller="workflow">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <pre ng-show="error" ng-bind="error"></pre>
-
-                <div class="row" ng-show="displaymetadata">
-                    <div class="col-md-6">
-                        <outgoing-links></outgoing-links>
-                    </div>
-                    <div class="col-md-6">
-                        <incoming-links></incoming-links>
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <!--<pre ng-show="oracle.metadata" ng-bind="oracle.metadata|json"></pre>-->
-                    <!-- Note: currently we support even overlapping columns in FK Links, e.g. AAGRVE and FACTURE have some -->
-                    <div class="col-md-12" ng-show="oracle.values" ng-switch="oracle.values.length === 1">
-
-                        <div class="row" ng-switch-when="true" ng-repeat="r in oracle.values">
-                            <!-- single item -->
-                            <div class="col-md-6">
-                                <singleitem-data></singleitem-data>
-                            </div>
-                            <div class="col-md-6">
-                                <singleitem-detailtables></singleitem-detailtables>
-                            </div>
-                        </div>
-
-                        <div class="row" ng-switch-when="false" style="overflow-x: auto;">
-                            <!-- an array of items -->
-                            <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; at a max. of 5000 rows</h3>
-                            <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
-                            <p>
-                                <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
-                            </p>
-
-                            <multipleitem-dxgrid ng-show="displaygrid"></multipleitem-dxgrid>
-                            <multipleitem-table ng-hide="displaygrid"></multipleitem-table>
-
-                        </div>
-                    </div>
-                </div>
-
+                <div ng-repeat="e in errors">{{e}}</div>
+                <h3>{{oracle.target}} Workflow in {{oracle.owner}} ({{oracle.language}})</h3>
             </div>
 
             <div class="col-md-2">
-                <list-of-tables></list-of-tables>
-            </div>
+                <h2>{{oracle.owner}}</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>Targets</h3>
+                        <ol>
+                            <li ng-repeat="v in targets">
+                                <a ng-click="set('target', v)">{{v}}</a>
+                            </li>
+                        </ol>
+                    </div>
 
+                    <div class="col-md-6">
+                        <h3>Languages</h3>
+                        <ol>
+                            <li ng-repeat="v in languages">
+                                <a ng-click="set('language', v)">{{v}}</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
