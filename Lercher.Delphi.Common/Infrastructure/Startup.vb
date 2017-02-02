@@ -17,6 +17,7 @@ Public Class Startup
 #If DEBUG Then
         webroot = "\daten\Lercher.Delphi\Lercher.Delphi.Common\wwwroot"
 #End If
+        Console.WriteLine("Serving static files from: {0}", webroot)
         app.UseFileServer(New FileServerOptions() With {.FileSystem = New PhysicalFileSystem(webroot)})
     End Sub
 

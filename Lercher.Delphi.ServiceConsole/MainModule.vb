@@ -4,7 +4,8 @@ Imports Microsoft.Owin.Hosting
 Public Module MainModule
 
     Public Sub Main(args As String())
-        Console.WriteLine("This is Delphi, an Oracle for Data. 2016 M. Lercher")
+        Console.WriteLine("This is Delphi, an Oracle for Data. 2016-2017 M. Lercher")
+        Console.WriteLine(My.Computer.FileSystem.CurrentDirectory)
         Dim options = New Delphi.Common.Delphi.ConnectionOptions
         if Not CommandLine.Parser.Default.ParseArguments(args, options) Then
             'Console.WriteLine(options.GetUsage())
