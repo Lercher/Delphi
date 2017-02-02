@@ -41,6 +41,13 @@ ORDER BY c_src.POSITION
 
 
         Public Shared Function PointersAndLists(owner As String, tablename As String) As DataTable
+            Static cache As New Concurrent.ConcurrentDictionary(Of Tuple(Of String, String), DataTable)
+            Return cache.GetOrAdd(Tuple.Create(owner, tablename), AddressOf PointersAndListsImpl)
+        End Function
+
+        Private Shared Function PointersAndListsImpl(Owner_Tablename As Tuple(Of String, String)) As DataTable
+            Dim owner = Owner_Tablename.Item1
+            Dim tablename = Owner_Tablename.Item2
             Query.AssertIdentifier(owner, NameOf(owner))
             Query.AssertIdentifier(tablename, NameOf(tablename))
             Dim x = <x>
@@ -65,10 +72,5 @@ ORDER BY c_src.TABLE_NAME, c_dest.TABLE_NAME, c_list.CONSTRAINT_NAME, c_src.POSI
                 </x>
             Return Query.ExecuteDatatable(x)
         End Function
-
-
-
-
-
     End Class
 End Namespace
