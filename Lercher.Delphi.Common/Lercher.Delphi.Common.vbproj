@@ -188,6 +188,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wwwroot\WorkflowFO.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\Workflow.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -216,6 +219,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <TypeScriptCompile Include="wwwroot\js\d.ts\angular.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\workflowfo.ts" />
     <TypeScriptCompile Include="wwwroot\js\workflow.ts" />
     <TypeScriptCompile Include="wwwroot\js\delphi.ts" />
   </ItemGroup>

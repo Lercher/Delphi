@@ -73,30 +73,26 @@
             opacity: 0.5;
         }
     </style>
-    <script src="js/workflow.js"></script>
-    <title>Delphi Backoffice Workflows - an oracle for data</title>
+    <script src="js/workflowfo.js"></script>
+    <title>Delphi Frontoffice Workflows - an oracle for data</title>
 </head>
 
-<body ng-app="delphiApp" ng-controller="workflow">
+<body ng-app="delphiApp" ng-controller="workflowfo">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
                 <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
-                <h3>{{oracle.target}} Backoffice Workflow in {{oracle.owner}} ({{oracle.language}})</h3>
-                <div ng-repeat="p in workflow.phases" class="phase">
-                    <div class="u">{{p.order}}:{{p.phase}} &ndash; {{p.label}}</div>
-                    <span ng-repeat="s in p.steps track by $index" class="internal{{s.internal}}">{{$index}}:{{s.step}} &ndash; {{s.label}}</span>
-                </div>
+                <h3>Frontoffice Workflow {{oracle.workflow}} in {{oracle.owner}} ({{oracle.language}})</h3>
             </div>
 
             <div class="col-md-2">
                 <h2>{{oracle.owner}}</h2>
                 <div class="row">
                     <div class="col-md-6">
-                        <h3>Targets</h3>
+                        <h3>Workflows</h3>
                         <ol>
-                            <li ng-repeat="v in targets">
-                                <a ng-click="set('target', v)">{{v}}</a>
+                            <li ng-repeat="v in workflows">
+                                <a ng-click="set('workflow', v)">{{v}}</a>
                             </li>
                         </ol>
                     </div>
