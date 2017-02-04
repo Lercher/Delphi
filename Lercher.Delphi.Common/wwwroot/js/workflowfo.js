@@ -53,6 +53,7 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
         $http.get(url.workflowfo + $scope.oracle.owner + "/" + wf, { params: { language: language } }).error(error)
             .success(function (data) { $scope.workflow = denormalize(data); $scope.closederrors++; });
         function denormalize(wf) {
+            wf.workflow = wf.workflow[0];
             return wf;
         }
     }

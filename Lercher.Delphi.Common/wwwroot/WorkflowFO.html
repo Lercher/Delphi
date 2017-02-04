@@ -82,7 +82,8 @@
         <div class="row">
             <div class="col-md-10">
                 <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
-                <h3>Frontoffice Workflow {{oracle.workflow}} in {{oracle.owner}} ({{oracle.language}})</h3>
+                <h3>{{workflow.workflow.label}} &ndash; Frontoffice Workflow {{workflow.workflowkey}} in {{workflow.owner}} ({{workflow.language}})</h3>
+                <div>{{workflow.workflow.description}}</div>
             </div>
 
             <div class="col-md-2">
