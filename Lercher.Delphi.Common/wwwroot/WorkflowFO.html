@@ -43,7 +43,7 @@
             font-size: small;
         }
 
-        div.phase {
+        div.step {
             border: medium solid gray;
             border-radius: 1em;
             margin: 1em 1em 1em 1em;
@@ -54,23 +54,39 @@
             vertical-align: top;
         }
 
-        div.u {
-            text-align: center;
+        div.highlight {
+            background-color: lightsteelblue;
+        }
+
+        div.big {
             font-size: 120%;
             font-weight: bold;
+        }
+
+        div.u {
             padding-bottom: 1em;
             margin-bottom: 1em;
-            border-bottom: medium solid gray;
+            border-bottom: thin solid gray;
         }
 
         div.phase span {
             padding: 0.2ex 0.2ex 0.2ex 0.2ex;
-            display:  block;
+            display: block;
             width: auto;
         }
 
         .internal, .internal0 {
             opacity: 0.5;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin: 0.3ex 0 0.3ex 0;
         }
     </style>
     <script src="js/workflowfo.js"></script>
@@ -84,6 +100,36 @@
                 <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
                 <h3>{{workflow.workflow.label}} &ndash; Frontoffice Workflow {{workflow.workflowkey}} in {{workflow.owner}} ({{workflow.language}})</h3>
                 <div>{{workflow.workflow.description}}</div>
+
+                <h3>States / Steps</h3>
+
+                <div ng-repeat="s in workflow.steps" class="{{class(s.order)}}step">
+                    <div class="u big" title="order:executionorder type executionmode">
+                        {{s.order}}:{{s.executionorder}} {{s.type}} {{s.executionmode}}
+                    </div>
+                    <div class="u" title="type action actionmode">
+                        {{s.actiontype}} action {{s.action}} {{s.actionmode}}
+                        <ul title="Consequences">
+                            <li ng-repeat="c in s.consequences">
+                                {{c.consequenceorder}}. <b>{{c.label}}</b>
+                                <br />
+                                {{s.actiontype}} action {{s.action}} {{s.actionmode}}
+                                <span ng-show="c.mail">[mail]</span>
+                                <a ng-show="c.otherworkflow" ng-click="set('workflow', c.otherworkflow)">[->WF:{{c.otherworkflow}}]</a>
+                                <br />
+                                <small>{{c.description}}</small>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul>
+                        <li ng-repeat="j in s.jumps">
+                            <a title="Rule ID" ng-show="j.rule">IF {{j.rule}}</a>
+                            <a title="target state"  ng-click="set('workflow', j.targetworkflow); set('hl', 's'+j.targetorder)">--&gt; {{j.targetorder}}</a>
+                            <a title="target state in different workflow" ng-hide="workflow.workflowkey === j.targetworkflow" ng-click="set('workflow', j.targetworkflow); set('hl', 's'+j.targetorder)"> in WF {{j.targetworkflow}}</a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
 
             <div class="col-md-2">
@@ -93,7 +139,7 @@
                         <h3>Workflows</h3>
                         <ol>
                             <li ng-repeat="v in workflows">
-                                <a ng-click="set('workflow', v)">{{v}}</a>
+                                <a ng-click="set('workflow', v); set('hl', undefined)">{{v}}</a>
                             </li>
                         </ol>
                     </div>

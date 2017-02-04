@@ -29,11 +29,14 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
         return false;
     }
 
+    $scope.class = (s) => 's'+s === $scope.highlight ? "highlight " : ""; 
+
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var path: string = $location.path().replace("/", "") || "TRREADY45";
         var hash: string = $location.hash();
         var search: any = $location.search();
+        $scope.highlight = search.hl || "(none)";
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.workflow = search.workflow || "WFALLGOOD";
         $scope.errors = [];
@@ -65,6 +68,24 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
 
         function denormalize(wf) {
             wf.workflow = wf.workflow[0];
+            for (var s = 0; s < wf.steps.length; s++) {
+                var step = wf.steps[s];
+                step.consequences = [];
+                for (var c = 0; c < wf.consequences.length; c++) {
+                    var cq = wf.consequences[c];
+                    if (cq.order === step.order)
+                        step.consequences.push(cq);
+                }
+                step.jumps = [];
+                for (var j = 0; j < wf.jumps.length; j++) {
+                    var jump = wf.jumps[j];
+                    if (jump.order === step.order)
+                        step.jumps.push(jump);
+                }
+            }
+            delete wf.consequences;
+            delete wf.jumps;
+            console.log(wf);
             return wf;
         }
     }
