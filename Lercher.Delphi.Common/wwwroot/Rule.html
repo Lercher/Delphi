@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/globalize/0.1.1/globalize.min.js"></script>
+    <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.light.compact.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style type="text/css">
+        th, td {
+            border-bottom: 1px solid #EEE;
+            border-right: 3px solid #DDD;
+            padding: 0px 5px 0px 5px;
+        }
+
+        th {
+            border-bottom: 2px solid #000;
+        }
+
+        td {
+            border-bottom: 1px solid #EEE;
+            vertical-align: text-top;
+        }
+
+        body {
+            /* HACK: http://stackoverflow.com/questions/24029359/horizontal-scrollbar-appearing-row-having-negative-margin */
+            overflow-x: hidden;
+        }
+
+        a {
+            cursor: pointer; /* a hand, even without an href */
+        }
+
+        footer {
+            margin-top: 6ex;
+            padding: 1ex;
+            background-color: lightgray;
+            font-size: small;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin: 0.3ex 0 0.3ex 0;
+        }
+    </style>
+    <script src="js/rule.js"></script>
+    <title>Delphi Rule - an oracle for data</title>
+</head>
+
+<body ng-app="delphiApp" ng-controller="rule">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-repeat="e in errors" ng-hide="closederrors === errors.length">{{e}}</div>
+
+                <div>{{rule.rule.code}} &ndash; Rule {{rule.key}} in {{rule.owner}} ({{rule.language}})</div>
+                <div>{{rule.rule.status}} {{rule.rule.type}} on {{rule.rule.target}}</div>
+                <h3>
+                    <a title="first criterion" ng-show="rule.rule.firstcriterion" target="_blank" ng-href="{{crii(rule.rule.firstcriterion)}}">[C{{rule.rule.firstcriterion}}]</a>
+                    <a title="first rule" ng-show="rule.rule.firstrule">[R{{rule.rule.firstrule}}]</a>
+                    {{rule.rule.operator}} 
+                    ( 
+                    <a title="second criterion min" ng-show="rule.rule.secondcriterionmin" target="_blank" ng-href="{{crii(rule.rule.secondcriterionmin)}}">[C{{rule.rule.secondcriterionmin}}]</a>
+                    {{rule.rule.lowerlimit}} 
+                    | 
+                    <a title="second criterion max" ng-show="rule.rule.secondcriterionmax" target="_blank" ng-href="{{crii(rule.rule.secondcriterionmax)}}">[C{{rule.rule.secondcriterionmax}}]</a>
+                    {{rule.rule.upperlimit}}
+                    )
+                </h3>
+                <ul title="values list">
+                    <li ng-repeat="v in rule.values">
+                        <span title="literal value">{{v.value}}</span>
+                        <a title="criterion" ng-show="v.criterion" target="_blank" ng-href="{{crii(v.criterion)}}">[C{{v.criterion}}]</a>
+                        <a title="rule" ng-show="v.rule">[R{{v.rule}}]</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /delphi/#/CRITERIA?CRIID=5125#pk -->
+
+    <footer>
+        see:
+        <a target="_blank" href="https://github.com/lercher/delphi">this project at GitHub</a>
+        |
+        <a target="_blank" href="https://angularjs.org/">AngularJS</a>
+        |
+        <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a>
+        |
+        and <a target="_blank" href="http://www.asp.net/web-api">Web API</a> at the backend
+    </footer>
+</body>
+</html>

@@ -123,7 +123,7 @@
                     </div>
                     <ul>
                         <li ng-repeat="j in s.jumps">
-                            <a title="Rule ID" ng-show="j.rule">IF {{j.rule}}</a>
+                            <a title="Rule ID" ng-show="j.rule" ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{j.rule}}" target="_blank">IF {{j.rule}}</a>
                             <a title="target state"  ng-click="set('workflow', j.targetworkflow); set('hl', 's'+j.targetorder)">--&gt; {{j.targetorder}}</a>
                             <a title="target state in different workflow" ng-hide="workflow.workflowkey === j.targetworkflow" ng-click="set('workflow', j.targetworkflow); set('hl', 's'+j.targetorder)"> in WF {{j.targetworkflow}}</a>
                         </li>
