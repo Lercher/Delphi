@@ -41,3 +41,9 @@ You have to provide several commandline options to specify the connection to an 
 To connect to your favourite locally installed xe oracle edition user SYSTEM, start:
 
     Lercher.Delphi.ServiceConsole.exe -p 1521 -h localhost -s xe -u SYSTEM -c you-know-your-password
+
+### New in 2017
+
+* Back Office workflow viewer
+* Front Office workflow viewer
+* including RULE and CRITIRIA viewer
