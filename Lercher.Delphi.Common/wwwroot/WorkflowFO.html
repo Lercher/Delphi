@@ -113,7 +113,7 @@
                             <li ng-repeat="c in s.consequences">
                                 {{c.consequenceorder}}. <b>{{c.label}}</b>
                                 <br />
-                                {{s.actiontype}} action {{s.action}} {{s.actionmode}}
+                                {{c.actiontype}} action {{c.action}} {{c.actionmode}}
                                 <span ng-show="c.mail">[mail]</span>
                                 <a ng-show="c.otherworkflow" ng-click="set('workflow', c.otherworkflow)">[->WF:{{c.otherworkflow}}]</a>
                                 <br />
