@@ -121,6 +121,11 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="u" title="dependencies" ng-show="s.dependencies.length > 0">
+                        All in history: <span ng-repeat="d in s.dependencies">
+                        <a title="dependent state" ng-click="set('hl', 's'+d.dependency)">[{{j.targetorder}}]</a>
+                        </span>
+                    </div>
                     <ul>
                         <li ng-repeat="j in s.jumps">
                             <a title="Rule ID" ng-show="j.rule" ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{j.rule}}" target="_blank">IF {{j.rule}}</a>

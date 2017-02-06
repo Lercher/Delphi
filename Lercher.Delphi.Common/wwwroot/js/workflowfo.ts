@@ -82,9 +82,16 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
                     if (jump.order === step.order)
                         step.jumps.push(jump);
                 }
+                step.dependencies = [];
+                for (var d = 0; d < wf.dependencies.length; d++) {
+                    var dep = wf.dependencies[d];
+                    if (dep.order === step.order)
+                        step.dependencies.push(dep);
+                }
             }
             delete wf.consequences;
             delete wf.jumps;
+            delete wf.dependencies;
             console.log(wf);
             return wf;
         }

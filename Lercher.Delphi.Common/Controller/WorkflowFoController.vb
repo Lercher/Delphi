@@ -53,7 +53,7 @@ WHERE C.WORCODE=<p><%= WorkflowKey %></p>
 ORDER BY C.WSTORDER, C.WSCORDER
         </x>)
 
-                wd.jumps = Delphi.Query.ExecuteDatatable(<x>
+        wd.jumps = Delphi.Query.ExecuteDatatable(<x>
 SELECT 
         J.WSTORDER as "order"
         , J.WSTORDERDEST as "targetorder"
@@ -64,6 +64,12 @@ WHERE J.WORCODE=<p><%= WorkflowKey %></p>
 ORDER BY J.WSTORDER, J.WORCODEDEST, J.WSTORDERDEST
         </x>)
 
+        wd.dependencies = Delphi.Query.ExecuteDatatable(<x>
+SELECT WSTORDER as "order", WSTORDERDEPENDENCY as "dependency"
+FROM <%= owner %>.WSTDEPENDENCY
+WHERE WORCODE=<p><%= WorkflowKey %></p> 
+ORDER BY WSTORDER, WSTORDERDEPENDENCY
+        </x>)
         Return wd
     End Function
 
@@ -75,5 +81,6 @@ ORDER BY J.WSTORDER, J.WORCODEDEST, J.WSTORDERDEST
         Public Property steps As DataTable
         Public Property jumps As DataTable
         Public Property consequences As DataTable
+        Public Property dependencies As DataTable
     End Class
 End Class
