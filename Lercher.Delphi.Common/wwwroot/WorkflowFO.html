@@ -111,7 +111,9 @@
                         {{s.actiontype}} action {{s.action}} {{s.actionmode}}
                         <ul title="Consequences">
                             <li ng-repeat="c in s.consequences">
-                                {{c.consequenceorder}}. <b>{{c.label}}</b>
+                                {{c.consequenceorder}}. 
+                                IF (Rules)
+                                <b>{{c.label}}</b>
                                 <br />
                                 {{c.actiontype}} action {{c.action}} {{c.actionmode}}
                                 <span ng-show="c.mail">[mail]</span>
