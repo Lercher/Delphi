@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\RuleController.vb" />
+    <Compile Include="Controller\EventController.vb" />
     <Compile Include="Controller\WorkflowFoController.vb" />
     <Compile Include="Controller\WorkflowController.vb" />
     <Compile Include="Controller\ValuesController.vb" />

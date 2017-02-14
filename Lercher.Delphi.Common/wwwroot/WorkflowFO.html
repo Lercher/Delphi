@@ -4,29 +4,18 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
     <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/globalize/0.1.1/globalize.min.js"></script>
     <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.common.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.light.compact.css" />
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
     <style type="text/css">
-        th, td {
-            border-bottom: 1px solid #EEE;
-            border-right: 3px solid #DDD;
-            padding: 0px 5px 0px 5px;
-        }
-
-        th {
-            border-bottom: 2px solid #000;
-        }
-
-        td {
-            border-bottom: 1px solid #EEE;
-            vertical-align: text-top;
-        }
-
         body {
             /* HACK: http://stackoverflow.com/questions/24029359/horizontal-scrollbar-appearing-row-having-negative-margin */
             overflow-x: hidden;
@@ -94,6 +83,37 @@
 </head>
 
 <body ng-app="delphiApp" ng-controller="workflowfo">
+
+    <script type="text/ng-template" id="events.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">
+                <span ng-repeat="evt in eventdefinition.events" ng-show="evt.TMFFONCTION === step.action">
+                    <span>{{evt.label}}</span>
+                </span>
+            </h3>
+            <p>
+                {{step.actiontype}} action {{step.action}} {{step.actionmode}}
+            </p>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <h3>Other events</h3>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Label ({{oracle.language}})</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="evt in eventdefinition.events">
+                        <td>{{evt.TMFFONCTION}}</td>
+                        <td>{{evt.label}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </script>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
@@ -108,7 +128,7 @@
                         {{s.order}}:{{s.executionorder}} {{s.type}} {{s.executionmode}}
                     </div>
                     <div class="u" title="type action actionmode">
-                        {{s.actiontype}} action {{s.action}} {{s.actionmode}}
+                        <a ng-click="showdlg(s)">{{s.actiontype}} action {{s.action}} {{s.actionmode}}</a>
                         <ul title="Consequences">
                             <li ng-repeat="c in s.consequences">
                                 {{c.consequenceorder}}. 

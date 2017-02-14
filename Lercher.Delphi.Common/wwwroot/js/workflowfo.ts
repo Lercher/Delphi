@@ -1,5 +1,5 @@
 ﻿/// <reference path="d.ts/angular.d.ts"/>
-// angular 1.4.5
+// angular 1.6.1
 
 declare var $: any;
 
@@ -7,8 +7,8 @@ declare var $: any;
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
-var mod = angular.module("delphiApp", ['dx']);
-mod.controller("workflowfo", function ($scope, $http, $location) {
+var mod = angular.module("delphiApp", ['dx', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
     $scope.languages = [];
     $scope.workflows = [];
@@ -29,10 +29,10 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
         return false;
     }
 
-    $scope.class = (s) => 's'+s === $scope.highlight ? "highlight " : ""; 
+    $scope.class = (s) => 's' + s === $scope.highlight ? "highlight " : "";
 
     $scope.$on('$locationChangeSuccess', function () {
-        console.log("$locationChangeSuccess -> " + $location.url());
+        $log.log("$locationChangeSuccess -> " + $location.url());
         var path: string = $location.path().replace("/", "") || "TRREADY45";
         var hash: string = $location.hash();
         var search: any = $location.search();
@@ -49,22 +49,31 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
         show_workflow($scope.oracle.workflow, $scope.oracle.language);
     });
 
-    function notice(s: string) {
-        $scope.errors.push(s);
-    }
+    $scope.showdlg = step => {
+        $uibModal.open({
+            templateUrl: 'events.html',
+            controller: 'eventsController',
+            resolve: { step, oracle: $scope.oracle }
+        }).result.catch(function () {
+            // ignore. 
+            // "Possibly unhandled rejection: backdrop click"
+        });;
+    };
 
     function show(s: string) {
         notice("loading " + s + " ...");
         $scope[s] = [];
-        $http.get(url.values + $scope.oracle.owner + "/" + s).error(error)
-            .success(data => { $scope[s] = data; $scope.closederrors++; });
+        $http({ url: url.values + $scope.oracle.owner + "/" + s })
+            .then(response => { $scope[s] = response.data; $scope.closederrors++; })
+            .catch(error);
     }
 
     function show_workflow(wf: string, language: string) {
         notice("loading workflow " + wf + "/" + language + " ...");
         $scope.workflow = {};
-        $http.get(url.workflowfo + $scope.oracle.owner + "/" + wf, { params: { language } }).error(error)
-            .success(data => { $scope.workflow = denormalize(data); $scope.closederrors++; });
+        $http({ url: url.workflowfo + $scope.oracle.owner + "/" + wf, params: { language } })
+            .then(response => { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
+            .catch(error);
 
         function denormalize(wf) {
             wf.workflow = wf.workflow[0];
@@ -92,13 +101,40 @@ mod.controller("workflowfo", function ($scope, $http, $location) {
             delete wf.consequences;
             delete wf.jumps;
             delete wf.dependencies;
-            console.log(wf);
+            $log.log(wf);
             return wf;
         }
     }
 
-    function error(data) {
-        notice(data.ExceptionMessage || data.Message || data);
+    function notice(s: string) {
+        $scope.errors.push(s);
+    }
+
+    function error(r) {
+        notice(r.data.ExceptionMessage || r.data.Message || r.data);
     }
 });
 
+
+mod.controller("eventsController", function ($scope, $log, $http, $uibModalInstance, step, oracle) {
+    // TODO: load 
+    $scope.step = step;
+    $scope.oracle = oracle;
+    $scope.eventdefinition = {};
+    $log.log(step);
+
+    var url = { values: "api/values/", event: "api/event/" };
+
+    $http({ url: url.event + $scope.oracle.owner + "/AVDOSS", params: { language: $scope.oracle.language, code: "GLOBAL" } })
+        .then(response => $scope.eventdefinition = response.data)
+        .catch(error)
+        ;
+
+    function notice(s: string) {
+        $scope.errors.push(s);
+    }
+
+    function error(r) {
+        notice(r.data.ExceptionMessage || r.data.Message || r.data);
+    }
+});
