@@ -126,6 +126,8 @@
                 <div ng-repeat="s in workflow.steps" class="{{class(s.order)}}step">
                     <div class="u big" title="order:executionorder type executionmode">
                         {{s.order}}:{{s.executionorder}} {{s.type}} {{s.executionmode}}
+                        <br/>
+                        {{s.label}}
                     </div>
                     <div class="u" title="type action actionmode">
                         <a ng-click="showdlg(s)">{{s.actiontype}} action {{s.action}} {{s.actionmode}}</a>
