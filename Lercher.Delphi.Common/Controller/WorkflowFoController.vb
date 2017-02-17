@@ -70,6 +70,24 @@ FROM <%= owner %>.WSTDEPENDENCY
 WHERE WORCODE=<p><%= WorkflowKey %></p> 
 ORDER BY WSTORDER, WSTORDERDEPENDENCY
         </x>)
+
+'        wd.consequencerules = Delphi.Query.ExecuteDatatable(<x>
+'SELECT 
+'        C.WSTORDER as "order", C.WSCORDER as "consequenceorder"
+'        , C.WSCACTIONTYPE as "actiontype", C.WSCACTIONCODE as "action", C.WSCACTIONMODE as "actionmode"
+'        , C.WSCFLAGMAIL as "mail"
+'        , C.WORCODEDEST as "otherworkflow"
+'        , LC.WSTLABEL as "label", LC.WSTDESCRIPTION as "description"
+'FROM <%= owner %>.WSTCONSEQUENCE C
+'LEFT OUTER JOIN <%= owner %>.LANWSTCONSEQUENCE LC ON C.WORCODE = LC.WORCODE
+'AND C.WSTORDER = LC.WSTORDER
+'AND C.WSCORDER = LC.WSCORDER
+'AND LC.LANCODE = <p><%= language %></p>
+'WHERE C.WORCODE=<p><%= WorkflowKey %></p> 
+'ORDER BY C.WSTORDER, C.WSCORDER
+'        </x>)
+
+
         Return wd
     End Function
 
@@ -82,5 +100,6 @@ ORDER BY WSTORDER, WSTORDERDEPENDENCY
         Public Property jumps As DataTable
         Public Property consequences As DataTable
         Public Property dependencies As DataTable
+        Public Property consequencerules As DataTable
     End Class
 End Class
