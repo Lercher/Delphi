@@ -104,8 +104,8 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
             delete wf.consequences;
             delete wf.jumps;
             delete wf.dependencies;
+            delete wf.consequencerules;
             $log.log(wf);
-            //delete wf.consequencerules;
             return wf;
         }
 
