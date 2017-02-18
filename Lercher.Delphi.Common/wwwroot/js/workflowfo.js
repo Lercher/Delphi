@@ -65,14 +65,17 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
             .then(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
             .catch(error);
         function denormalize(wf) {
+            wf.consequencerules = objectify(wf.consequencerules);
             wf.workflow = wf.workflow[0];
             for (var s = 0; s < wf.steps.length; s++) {
                 var step = wf.steps[s];
                 step.consequences = [];
                 for (var c = 0; c < wf.consequences.length; c++) {
                     var cq = wf.consequences[c];
-                    if (cq.order === step.order)
+                    if (cq.order === step.order) {
+                        cq.rules = findrules(wf.consequencerules, step.order, cq.consequenceorder);
                         step.consequences.push(cq);
+                    }
                 }
                 step.jumps = [];
                 for (var j = 0; j < wf.jumps.length; j++) {
@@ -91,7 +94,29 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
             delete wf.jumps;
             delete wf.dependencies;
             $log.log(wf);
+            //delete wf.consequencerules;
             return wf;
+        }
+        function objectify(consequencerules) {
+            var r = {};
+            for (var i in consequencerules) {
+                var cr = consequencerules[i];
+                var p = "p" + cr.id;
+                r[p] = r[p] || {};
+                var val = cr.textvalue || cr.value;
+                r[p][cr.code] = val;
+                r[p].rule = r[p].rule || cr.rule; // it's currently the same in every line, but it needn't.
+            }
+            return r;
+        }
+        function findrules(consequencerules, step, cq) {
+            var r = [];
+            for (var i in consequencerules) {
+                var cr = consequencerules[i];
+                if (cr.WSTORDER === step && cr.WSCORDER === cq)
+                    r.push(cr.rule);
+            }
+            return r;
         }
     }
     function notice(s) {

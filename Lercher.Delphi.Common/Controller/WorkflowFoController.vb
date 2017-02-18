@@ -71,21 +71,36 @@ WHERE WORCODE=<p><%= WorkflowKey %></p>
 ORDER BY WSTORDER, WSTORDERDEPENDENCY
         </x>)
 
-'        wd.consequencerules = Delphi.Query.ExecuteDatatable(<x>
-'SELECT 
-'        C.WSTORDER as "order", C.WSCORDER as "consequenceorder"
-'        , C.WSCACTIONTYPE as "actiontype", C.WSCACTIONCODE as "action", C.WSCACTIONMODE as "actionmode"
-'        , C.WSCFLAGMAIL as "mail"
-'        , C.WORCODEDEST as "otherworkflow"
-'        , LC.WSTLABEL as "label", LC.WSTDESCRIPTION as "description"
-'FROM <%= owner %>.WSTCONSEQUENCE C
-'LEFT OUTER JOIN <%= owner %>.LANWSTCONSEQUENCE LC ON C.WORCODE = LC.WORCODE
-'AND C.WSTORDER = LC.WSTORDER
-'AND C.WSCORDER = LC.WSCORDER
-'AND LC.LANCODE = <p><%= language %></p>
-'WHERE C.WORCODE=<p><%= WorkflowKey %></p> 
-'ORDER BY C.WSTORDER, C.WSCORDER
-'        </x>)
+        wd.consequencerules = Delphi.Query.ExecuteDatatable(<x>
+SELECT 
+    D.CDDORDRE as "id"
+    , DE.CDECODE as "code"
+    , DE.CDECODETYPE as "codetype"
+    , D.CDDSTRINGVALUE as "textvalue"
+    , D.CDDNUMERICVALUE as "value"
+    , DR.RULID as "rule"
+FROM <%= owner %>.CUSTOMSETTING S
+INNER JOIN <%= owner %>.CUSDEFDATA D
+    ON D.CSEID = S.CSEID
+    AND S.CSETYPE='TABLE'  
+    AND S.CSETABLE='WSTCONSEQUENCE'
+    AND S.CSEENTITY='WSTCONSEQUENCE'
+INNER JOIN <%= owner %>.CUSDEFINITION DE
+    ON DE.CSEID=S.CSEID
+    AND DE.CDEORDRE=D.CDEORDRE
+LEFT OUTER JOIN <%= owner %>.CDDRUL DR 
+    ON DR.CSEID = S.CSEID
+    AND DR.CDEORDRE = D.CDEORDRE
+    AND DR.CDDORDRE = D.CDDORDRE
+WHERE D.CDDORDRE in (
+  SELECT DD.CDDORDRE
+  FROM <%= owner %>.CUSDEFDATA DD
+  WHERE DD.CSEID = S.CSEID
+  AND DD.CDDSTRINGVALUE=<p><%= WorkflowKey %></p> 
+)
+AND NOT DE.CDECODE = 'WORCODE'
+ORDER BY D.CDDORDRE, D.CDEORDRE
+        </x>)
 
 
         Return wd
