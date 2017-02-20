@@ -55,9 +55,16 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
             controller: 'eventsController',
             resolve: { step, oracle: $scope.oracle }
         }).result.catch(function () {
-            // ignore. 
-            // "Possibly unhandled rejection: backdrop click"
-        });;
+            // ignore "Possibly unhandled rejection: backdrop click"
+        });
+    };
+
+    $scope.showcqaction = () => {
+        $uibModal.open({
+            templateUrl: 'cqaction.html'
+        }).result.catch(function () {
+            // ignore "Possibly unhandled rejection: backdrop click"
+        });
     };
 
     function show(s: string) {

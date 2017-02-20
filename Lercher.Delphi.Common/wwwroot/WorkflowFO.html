@@ -114,6 +114,32 @@
         </div>
     </script>
 
+    <script type="text/ng-template" id="cqaction.html">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">
+                WSTCONSEQUENCE::WSCACTIONTYPE
+            </h4>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <dl>
+                <dt>CHANGE_PHASE</dt>
+                <dd>Change step/status of the deal</dd>
+
+                <dt>FORMALITE</dt>
+                <dd>Generate a task</dd>
+
+                <dt>DOCUMENT</dt>
+                <dd>Generate a document</dd>
+
+                <dt>CLOSE_FORMALITE</dt>
+                <dd>Automaticully closes an existing task after the selected workflow step is run</dd>
+
+                <dt>CLOSE_STEP</dt>
+                <dd>Hides a workflow step from the same workflow</dd>
+            </dl>
+        </div>
+    </script>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
@@ -126,23 +152,24 @@
                 <div ng-repeat="s in workflow.steps" class="{{class(s.order)}}step">
                     <div class="u big" title="order:executionorder type executionmode">
                         {{s.order}}:{{s.executionorder}} {{s.type}} {{s.executionmode}}
-                        <br/>
+                        <br />
                         {{s.label}}
                     </div>
                     <div class="u" title="type action actionmode">
                         <a ng-click="showdlg(s)">{{s.actiontype}} action {{s.action}} {{s.actionmode}}</a>
                         <ul title="Consequences">
                             <li ng-repeat="c in s.consequences">
-                                {{c.consequenceorder}}. 
+                                {{c.consequenceorder}}.
                                 <span ng-show="c.rules.length">
                                     If
                                     <a title="Rule ID" ng-repeat="r in c.rules" target="_blank"
-                                       ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{r}}">{{r}} </a>
+                                       ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{r}}">{{r}}</a>
                                     --&gt;
                                 </span>
                                 <b>{{c.label}}</b>
                                 <br />
-                                {{c.actiontype}} action {{c.action}} {{c.actionmode}}
+                                <a ng-click="showcqaction()">{{c.actiontype}}</a> 
+                                action {{c.action}} {{c.actionmode}}
                                 <span ng-show="c.mail">[mail]</span>
                                 <a ng-show="c.otherworkflow" ng-click="set('workflow', c.otherworkflow)">[->WF:{{c.otherworkflow}}]</a>
                                 <br />
@@ -152,7 +179,7 @@
                     </div>
                     <div class="u" title="dependencies" ng-show="s.dependencies.length > 0">
                         All in history: <span ng-repeat="d in s.dependencies">
-                        <a title="dependent state" ng-click="set('hl', 's'+d.dependency)">[{{j.targetorder}}]</a>
+                            <a title="dependent state" ng-click="set('hl', 's'+d.dependency)">[{{j.targetorder}}]</a>
                         </span>
                     </div>
                     <ul>
