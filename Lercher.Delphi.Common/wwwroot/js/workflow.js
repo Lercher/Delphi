@@ -1,5 +1,5 @@
 /// <reference path="d.ts/angular.d.ts"/>
-// angular 1.4.5
+// angular 1.6.1
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
@@ -44,14 +44,16 @@ mod.controller("workflow", function ($scope, $http, $location) {
     function show(s) {
         notice("loading " + s + " ...");
         $scope[s] = [];
-        $http.get(url.values + $scope.oracle.owner + "/" + s).error(error)
-            .success(function (data) { $scope[s] = data; $scope.closederrors++; });
+        $http({ url: url.values + $scope.oracle.owner + "/" + s })
+            .then(function (response) { $scope[s] = response.data; $scope.closederrors++; })
+            .catch(error);
     }
     function show_workflow(target, language) {
         notice("loading workflow " + target + "/" + language + " ...");
         $scope.workflow = {};
-        $http.get(url.workflow + $scope.oracle.owner + "/" + target, { params: { language: language } }).error(error)
-            .success(function (data) { $scope.workflow = denormalize(data); $scope.closederrors++; });
+        $http.get({ url: url.workflow + $scope.oracle.owner + "/" + target, params: { language: language } })
+            .success(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
+            .catch(error);
         function denormalize(wf) {
             // convert the array steps to an associative array:
             var ar = wf.steps;
@@ -79,7 +81,7 @@ mod.controller("workflow", function ($scope, $http, $location) {
         }
         ;
     }
-    function error(data) {
-        notice(data.ExceptionMessage || data.Message || data);
+    function error(r) {
+        notice(r.data.ExceptionMessage || r.data.Message || r.data);
     }
 });

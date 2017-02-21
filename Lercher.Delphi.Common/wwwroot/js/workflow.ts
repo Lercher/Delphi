@@ -1,5 +1,5 @@
 ﻿/// <reference path="d.ts/angular.d.ts"/>
-// angular 1.4.5
+// angular 1.6.1
 
 declare var $: any;
 
@@ -53,15 +53,17 @@ mod.controller("workflow", function ($scope, $http, $location) {
     function show(s: string) {
         notice("loading " + s + " ...");
         $scope[s] = [];
-        $http.get(url.values + $scope.oracle.owner + "/" + s).error(error)
-            .success(data => { $scope[s] = data; $scope.closederrors++; });
+        $http({ url: url.values + $scope.oracle.owner + "/" + s })
+            .then(response => { $scope[s] = response.data; $scope.closederrors++; })
+            .catch(error);
     }
 
     function show_workflow(target: string, language: string) {
         notice("loading workflow " + target + "/" + language + " ...");
         $scope.workflow = {};
-        $http.get(url.workflow + $scope.oracle.owner + "/" + target, { params: { language } }).error(error)
-            .success(data => { $scope.workflow = denormalize(data); $scope.closederrors++; });
+        $http.get({url: url.workflow + $scope.oracle.owner + "/" + target, params: { language } })
+            .success(response => { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
+            .catch(error);
 
         function denormalize(wf) {
             // convert the array steps to an associative array:
@@ -92,8 +94,8 @@ mod.controller("workflow", function ($scope, $http, $location) {
 
     }
 
-    function error(data) {
-        notice(data.ExceptionMessage || data.Message || data);
+    function error(r) {
+        notice(r.data.ExceptionMessage || r.data.Message || r.data);
     }
 });
 
