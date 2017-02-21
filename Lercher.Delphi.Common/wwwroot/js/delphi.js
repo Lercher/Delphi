@@ -1,5 +1,5 @@
 /// <reference path="d.ts/angular.d.ts"/>
-// angular 1.4.5
+// angular 1.6.1
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
@@ -126,27 +126,30 @@ mod.controller("delphi", function ($scope, $http, $location) {
             $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
             console.log($location.url());
             $scope.error = "following a link, loading data for " + tablename + " ...";
-            $http.post(url.tabledata + $scope.oracle.owner + "/" + tablename, body).error(error)
-                .success(function (data) { $scope.oracle = data; $scope.error = null; });
+            $http({ method: "POST", url: url.tabledata + $scope.oracle.owner + "/" + tablename, data: body })
+                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })
+                .catch(error);
         }
         else {
             $location.hash(null);
             $location.search({});
             console.log($location.url());
             $scope.error = "loading data for " + tablename + " ...";
-            $http.get(url.tabledata + $scope.oracle.owner + "/" + tablename).error(error)
-                .success(function (data) { $scope.oracle = data; $scope.error = null; });
+            $http({ url: url.tabledata + $scope.oracle.owner + "/" + tablename })
+                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })
+                .catch(error);
         }
     }
     function show_tables() {
         $scope.error = "loading tables ...";
         $scope.oracle.table = null;
         $scope.tables = [];
-        $http.get(url.tables + $scope.oracle.owner).error(error)
-            .success(function (data) { $scope.tables = data; $scope.error = null; });
+        $http({ url: url.tables + $scope.oracle.owner })
+            .then(function (response) { $scope.tables = response.data; $scope.error = null; })
+            .catch(error);
     }
-    function error(data) {
-        $scope.error = data.ExceptionMessage || data.Message || data;
+    function error(r) {
+        $scope.error = r.data.ExceptionMessage || r.data.Message || r.data;
     }
     // for the DX grid only
     function getGridSettings(dsref) {
