@@ -20,7 +20,7 @@ mod.controller("rule", function ($scope, $http, $location) {
         $location.search(search);
         return false;
     };
-    $scope.crii = function (id) { return "default.html#/CRITERIA?CRIID=" + id + "#pk"; };
+    $scope.crii = function (id) { return "default.html#!/CRITERIA?CRIID=" + id + "#pk"; };
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var search = $location.search();

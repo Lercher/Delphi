@@ -27,7 +27,7 @@ mod.controller("rule", function ($scope, $http, $location) {
         return false;
     }
 
-    $scope.crii = (id) => "default.html#/CRITERIA?CRIID=" + id + "#pk";
+    $scope.crii = (id) => "default.html#!/CRITERIA?CRIID=" + id + "#pk";
 
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
