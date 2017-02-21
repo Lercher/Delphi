@@ -165,7 +165,7 @@
                                 <span ng-show="c.rules.length">
                                     If
                                     <a title="Rule ID" ng-repeat="r in c.rules" target="_blank"
-                                       ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{r}}">{{r}}</a>
+                                       ng-href="Rule.html#!?owner={{oracle.owner}}&language={{workflow.language}}&rule={{r}}">{{r}}</a>
                                     --&gt;
                                 </span>
                                 <b>{{c.label}}</b>
@@ -186,7 +186,7 @@
                     </div>
                     <ul>
                         <li ng-repeat="j in s.jumps">
-                            If <a title="Rule ID" ng-show="j.rule" ng-href="Rule.html#/{{oracle.owner}}?language={{workflow.language}}&rule={{j.rule}}" target="_blank">{{j.rule}}</a>
+                            If <a title="Rule ID" ng-show="j.rule" ng-href="Rule.html#!?owner={{oracle.owner}}&language={{workflow.language}}&rule={{j.rule}}" target="_blank">{{j.rule}}</a>
                             <a title="target state" ng-click="set('workflow', j.targetworkflow); set('hl', 's'+j.targetorder)">
                                 --&gt; {{j.targetorder}}
                                 <span title="target state in different workflow" ng-hide="workflow.workflowkey === j.targetworkflow"> in WF {{j.targetworkflow}}</span>
