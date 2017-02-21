@@ -7,7 +7,7 @@ declare var $: any;
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
-var mod = angular.module("delphiApp", ['dx', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+var mod = angular.module("delphiApp", ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
 mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
     $scope.languages = [];
@@ -33,16 +33,15 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
 
     $scope.$on('$locationChangeSuccess', function () {
         $log.log("$locationChangeSuccess -> " + $location.url());
-        var path: string = $location.path().replace("/", "") || "TRREADY45";
-        var hash: string = $location.hash();
         var search: any = $location.search();
         $scope.highlight = search.hl || "(none)";
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.workflow = search.workflow || "WFALLGOOD";
+        var owner: string = search.owner || "TRREADY45";
         $scope.errors = [];
         $scope.closederrors = 0;
-        if ($scope.oracle.owner !== path) {
-            $scope.oracle.owner = path;
+        if ($scope.oracle.owner !== owner) {
+            $scope.oracle.owner = owner;
             show("languages");
             show("workflows");
         }
@@ -162,8 +161,7 @@ mod.controller("eventsController", function ($scope, $log, $http, $uibModalInsta
 
     $http({ url: url.event + $scope.oracle.owner + "/AVDOSS", params: { language: $scope.oracle.language, code: "GLOBAL" } })
         .then(response => $scope.eventdefinition = response.data)
-        .catch(error)
-        ;
+        .catch(error);
 
     function notice(s: string) {
         $scope.errors.push(s);

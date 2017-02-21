@@ -3,7 +3,7 @@
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
-var mod = angular.module("delphiApp", ['dx', 'ngAnimate', 'ngSanitize', 'ui.bootstrap']);
+var mod = angular.module("delphiApp", ['ngAnimate', 'ngSanitize', 'ui.bootstrap']);
 mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
     $scope.languages = [];
@@ -25,16 +25,15 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
     $scope.class = function (s) { return 's' + s === $scope.highlight ? "highlight " : ""; };
     $scope.$on('$locationChangeSuccess', function () {
         $log.log("$locationChangeSuccess -> " + $location.url());
-        var path = $location.path().replace("/", "") || "TRREADY45";
-        var hash = $location.hash();
         var search = $location.search();
         $scope.highlight = search.hl || "(none)";
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.workflow = search.workflow || "WFALLGOOD";
+        var owner = search.owner || "TRREADY45";
         $scope.errors = [];
         $scope.closederrors = 0;
-        if ($scope.oracle.owner !== path) {
-            $scope.oracle.owner = path;
+        if ($scope.oracle.owner !== owner) {
+            $scope.oracle.owner = owner;
             show("languages");
             show("workflows");
         }

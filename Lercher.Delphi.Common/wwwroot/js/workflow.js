@@ -3,7 +3,7 @@
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
-var mod = angular.module("delphiApp", ['dx']);
+var mod = angular.module("delphiApp", []);
 mod.controller("workflow", function ($scope, $http, $location) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
     $scope.languages = [];
@@ -24,15 +24,14 @@ mod.controller("workflow", function ($scope, $http, $location) {
     };
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
-        var path = $location.path().replace("/", "") || "TRREADY45";
-        var hash = $location.hash();
         var search = $location.search();
         $scope.oracle.language = search.language || "EN";
-        $scope.oracle.target = search.target || "DOSSIER";
+        $scope.oracle.target = search.target || "AVDOSS";
+        var owner = search.owner || "TRREADY45";
         $scope.errors = [];
         $scope.closederrors = 0;
-        if ($scope.oracle.owner !== path) {
-            $scope.oracle.owner = path;
+        if ($scope.oracle.owner !== owner) {
+            $scope.oracle.owner = owner;
             show("languages");
             show("targets");
         }
@@ -51,8 +50,8 @@ mod.controller("workflow", function ($scope, $http, $location) {
     function show_workflow(target, language) {
         notice("loading workflow " + target + "/" + language + " ...");
         $scope.workflow = {};
-        $http.get({ url: url.workflow + $scope.oracle.owner + "/" + target, params: { language: language } })
-            .success(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
+        $http({ url: url.workflow + $scope.oracle.owner + "/" + target, params: { language: language } })
+            .then(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
             .catch(error);
         function denormalize(wf) {
             // convert the array steps to an associative array:
