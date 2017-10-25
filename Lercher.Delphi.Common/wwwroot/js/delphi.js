@@ -66,7 +66,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
                 pk: objectToKvArray(search),
                 direction: "pk"
             };
-            show_tabledata(path, body);
+            request_tabledata($scope.oracle.owner, path, body);
             // TODO - single item display is not a database query yet
         }
         else if (path && hash && hash.indexOf(".") > 0) {
@@ -76,10 +76,10 @@ mod.controller("delphi", function ($scope, $http, $location) {
                 pk: objectToKvArray(search),
                 direction: fkdir[1]
             };
-            show_tabledata(path, body);
+            request_tabledata($scope.oracle.owner, path, body);
         }
         else if (path) {
-            show_tabledata(path);
+            request_tabledata($scope.oracle.owner, path);
         }
         else if (!path) {
             // OK this is the start URL
@@ -100,6 +100,19 @@ mod.controller("delphi", function ($scope, $http, $location) {
         // alert("Show the one " + fk.destination + " where " + fk.matchcolumn[0].dest + " = " + r[fk.matchcolumn[0].src] + " ... by " + fk.key + " with " + fk.matchcolumn.length + " match(es))");
         var body = { key: fk.key, pk: buildPK(r), direction: direction };
         show_tabledata($scope.oracle.table, body);
+    }
+    function show_tabledata(tablename, body) {
+        if (body === void 0) { body = undefined; }
+        $location.path(tablename); // table as PATH
+        if (body) {
+            var hash = body.key ? body.key + '.' + body.direction : body.direction;
+            $location.hash(hash); // foreign key constraint name + . + forward/back or pk as HASH
+            $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
+        }
+        else {
+            $location.hash(null);
+            $location.search({});
+        }
     }
     ;
     ;
@@ -129,24 +142,16 @@ mod.controller("delphi", function ($scope, $http, $location) {
     }
     // --- REST service calls
     var url = { tables: "api/tables/", tabledata: "api/table/", tablemetadata: "api/tablemetadata/" };
-    function show_tabledata(tablename, body) {
+    function request_tabledata(owner, tablename, body) {
         if (body === void 0) { body = undefined; }
-        $location.path(tablename); // table as PATH
         if (body) {
-            var hash = body.key ? body.key + '.' + body.direction : body.direction;
-            $location.hash(hash); // foreign key constraint name + . + forward/back or pk as HASH
-            $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
-            console.log($location.url());
             $scope.error = "following a link, loading data for " + tablename + " ...";
-            $http({ method: "POST", url: url.tabledata + $scope.oracle.owner + "/" + tablename, data: body })
+            $http({ method: "POST", url: url.tabledata + owner + "/" + tablename, data: body })
                 .then(function (response) { $scope.oracle = response.data; $scope.error = null; })["catch"](error);
         }
         else {
-            $location.hash(null);
-            $location.search({});
-            console.log($location.url());
             $scope.error = "loading data for " + tablename + " ...";
-            $http({ url: url.tabledata + $scope.oracle.owner + "/" + tablename })
+            $http({ url: url.tabledata + owner + "/" + tablename })
                 .then(function (response) { $scope.oracle = response.data; $scope.error = null; })["catch"](error);
         }
     }
