@@ -40,14 +40,15 @@ Namespace Delphi
 
                 Using con = New OracleConnection(cs)
                     con.Open()
+                    Diagnostics.Trace.WriteLine("Connected.")
                     Using cmd = con.CreateCommand()
                         cmd.CommandText = cmdText
                         cmd.BindByName = True ' see http://stackoverflow.com/questions/7493028/ora-01008-not-all-variables-bound-they-are-bound/34597586#34597586
                         Dim n = 0
-                        For each p In params
+                        For Each p In params
                             n += 1
                             Dim pn = String.Format(STR_PARAM_FORMAT_VALUE, n)
-                            if isDatetime(p) then
+                            If isDatetime(p) Then
                                 Dim dt = DateTime.Parse(p, Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.RoundtripKind)
                                 cmd.Parameters.Add(pn, OracleDbType.Date).Value = dt
                             Else
@@ -59,9 +60,9 @@ Namespace Delphi
                         Dim tbl = New DataTable
                         Dim da = New OracleDataAdapter(cmd)
                         da.Fill(tbl)
-                        sw.Stop
+                        sw.Stop()
                         Diagnostics.Trace.WriteLine(String.Format("{0:n0} line(s) affected. Processing time: {1}", tbl.Rows.Count, sw.Elapsed))
-                        Diagnostics.Trace.WriteLine("")
+                        Diagnostics.Trace.WriteLine("------------")
                         Return tbl
                     End Using
                 End Using

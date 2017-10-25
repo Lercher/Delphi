@@ -152,6 +152,7 @@
     <Compile Include="Delphi\Table.vb" />
     <Compile Include="Delphi\TableData.vb" />
     <Compile Include="Infrastructure\BaseController.vb" />
+    <Compile Include="Infrastructure\FKCache.vb" />
     <Compile Include="Infrastructure\Startup.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

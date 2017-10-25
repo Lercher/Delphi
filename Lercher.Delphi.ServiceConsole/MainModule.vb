@@ -14,6 +14,11 @@ Public Module MainModule
         End If
 
         Delphi.Common.Delphi.Query.Connection = options
+        Console.Title = String.Format("{0} on {1} - Delphi", Delphi.Common.Delphi.Query.Connection.UserID, Delphi.Common.Delphi.Query.Connection.Host)
+        Console.WriteLine()
+        Console.WriteLine("Prepopulating the foreign key cache for '{0}'. This can take some time (at least 15s in the LAN and 40s remote) ...", Delphi.Common.Delphi.Query.Connection.UserID)
+        Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
+        Console.WriteLine()
         Dim url = "http://+:9001/delphi"
         Try
             Using app = WebApp.Start(Of Common.Startup)(url)
@@ -37,6 +42,6 @@ Public Module MainModule
     End Sub
 
     Public Sub StartBrowser()
-        System.Diagnostics.Process.Start("http://localhost:9001/delphi/")
+        System.Diagnostics.Process.Start("http://localhost:9001/delphi/#!?owner=" & Delphi.Common.Delphi.Query.Connection.UserID)
     End Sub
 End Module

@@ -50,13 +50,17 @@ ORDER BY c_src.POSITION
             Dim tablename = Owner_Tablename.Item2
             Query.AssertIdentifier(owner, NameOf(owner))
             Query.AssertIdentifier(tablename, NameOf(tablename))
+            Dim cached = FKCache.FKs(owner, tablename)
+            If cached IsNot Nothing Then Return cached
+
             Dim x = <x>
 SELECT
     c_list.CONSTRAINT_NAME as key,
     c_list.TABLE_NAME as srctable,
     c_src.COLUMN_NAME as srccolumn,
     c_dest.TABLE_NAME as desttable,
-    c_dest.COLUMN_NAME as destcolumn
+    c_dest.COLUMN_NAME as destcolumn,
+    c_src.POSITION as position
 FROM ALL_CONSTRAINTS c_list
 INNER JOIN ALL_CONS_COLUMNS c_src ON c_list.CONSTRAINT_NAME = c_src.CONSTRAINT_NAME AND c_list.OWNER = c_src.OWNER
 INNER JOIN ALL_CONS_COLUMNS c_dest ON c_list.R_CONSTRAINT_NAME = c_dest.CONSTRAINT_NAME AND c_list.R_OWNER = c_dest.OWNER
@@ -68,9 +72,34 @@ AND
 OR
   c_dest.OWNER = <p><%= owner %></p> AND c_dest.TABLE_NAME = <p><%= tablename %></p>
 )
-ORDER BY c_src.TABLE_NAME, c_dest.TABLE_NAME, c_list.CONSTRAINT_NAME, c_src.POSITION
+ORDER BY c_list.TABLE_NAME, c_dest.TABLE_NAME, c_list.CONSTRAINT_NAME, c_src.POSITION
                 </x>
+
             Return Query.ExecuteDatatable(x)
         End Function
+
+        Private Shared Function isEqual(d1 As DataTable, d2 As DataTable) As Boolean
+            Dim a = asString(d1)
+            Dim b = asString(d2)
+            If a = b Then Return True
+            Dim linesA = Split(a, ControlChars.CrLf)
+            Dim linesB = Split(b, ControlChars.CrLf)
+            For i = 0 To Math.Min(linesA.Count, linesB.Count) - 1
+                If linesA(i) = linesB(i) Then Continue For
+                Console.WriteLine("line {0,4}: {1,-40} {2,-40}", i + 1, linesA(i), linesB(i))
+            Next
+            Return False
+        End Function
+
+        Private Shared Function asString(d As DataTable) As String
+            d.TableName = "d1"
+            Dim sb = New Text.StringBuilder
+            Using sw = New IO.StringWriter(sb)
+                d.WriteXml(sw)
+            End Using
+            Return sb.ToString
+        End Function
+
+
     End Class
 End Namespace
