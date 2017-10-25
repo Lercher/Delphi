@@ -7,6 +7,12 @@ declare var $: any;
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
+// VS2017 - important 
+// Check Tools/Options/Text Editor/JavaScript|TypeScript/Project/Compile on Save
+// - Automatically compile typescript files which are not part of a project
+// - Use System code generation for modules which are not part of a project
+// and look for "Output(s) generated successfully." in the status bar after saving this file
+
 var mod = angular.module("delphiApp", ['dx']);
 mod.controller("delphi", function ($scope, $http, $location) {
     $scope.filter = { limit: 15 };
@@ -55,11 +61,16 @@ mod.controller("delphi", function ($scope, $http, $location) {
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var path : string = $location.path();
-        var hash : string = $location.hash();
+        var hash: string = $location.hash();
+        var search: any = $location.search();
+        if (search.owner) {
+            $scope.oracle.owner = search.owner;
+            delete search.owner;
+        }
         if (path && hash === "pk") {
             var body: LINK = {
                 key: "", 
-                pk: objectToKvArray($location.search()),
+                pk: objectToKvArray(search),
                 direction: "pk"
             };
             show_tabledata(path, body);
@@ -68,7 +79,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             var fkdir = hash.split(".", 2);
             var body: LINK = {
                 key: fkdir[0],
-                pk: objectToKvArray($location.search()),
+                pk: objectToKvArray(search),
                 direction: fkdir[1]
             }
             show_tabledata(path, body);

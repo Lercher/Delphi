@@ -3,6 +3,11 @@
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
+// VS2017 - important 
+// Check Tools/Options/Text Editor/JavaScript|TypeScript/Project/Compile on Save
+// - Automatically compile typescript files which are not part of a project
+// - Use System code generation for modules which are not part of a project
+// and look for "Output(s) generated successfully." in the status bar after saving this file
 var mod = angular.module("delphiApp", []);
 mod.controller("workflow", function ($scope, $http, $location) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
@@ -44,15 +49,13 @@ mod.controller("workflow", function ($scope, $http, $location) {
         notice("loading " + s + " ...");
         $scope[s] = [];
         $http({ url: url.values + $scope.oracle.owner + "/" + s })
-            .then(function (response) { $scope[s] = response.data; $scope.closederrors++; })
-            .catch(error);
+            .then(function (response) { $scope[s] = response.data; $scope.closederrors++; })["catch"](error);
     }
     function show_workflow(target, language) {
         notice("loading workflow " + target + "/" + language + " ...");
         $scope.workflow = {};
         $http({ url: url.workflow + $scope.oracle.owner + "/" + target, params: { language: language } })
-            .then(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })
-            .catch(error);
+            .then(function (response) { $scope.workflow = denormalize(response.data); $scope.closederrors++; })["catch"](error);
         function denormalize(wf) {
             // convert the array steps to an associative array:
             var ar = wf.steps;
@@ -84,3 +87,4 @@ mod.controller("workflow", function ($scope, $http, $location) {
         notice(r.data.ExceptionMessage || r.data.Message || r.data);
     }
 });
+//# sourceMappingURL=workflow.js.map

@@ -7,6 +7,12 @@ declare var $: any;
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
 
+// VS2017 - important 
+// Check Tools/Options/Text Editor/JavaScript|TypeScript/Project/Compile on Save
+// - Automatically compile typescript files which are not part of a project
+// - Use System code generation for modules which are not part of a project
+// and look for "Output(s) generated successfully." in the status bar after saving this file
+
 var mod = angular.module("delphiApp", []);
 mod.controller("workflow", function ($scope, $http, $location) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive

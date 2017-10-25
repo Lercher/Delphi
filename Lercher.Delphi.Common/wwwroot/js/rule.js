@@ -3,6 +3,11 @@
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
+// VS2017 - important 
+// Check Tools/Options/Text Editor/JavaScript|TypeScript/Project/Compile on Save
+// - Automatically compile typescript files which are not part of a project
+// - Use System code generation for modules which are not part of a project
+// and look for "Output(s) generated successfully." in the status bar after saving this file
 var mod = angular.module("delphiApp", []);
 mod.controller("rule", function ($scope, $http, $location) {
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
@@ -20,7 +25,7 @@ mod.controller("rule", function ($scope, $http, $location) {
         $location.search(search);
         return false;
     };
-    $scope.crii = function (id) { return "default.html#!/CRITERIA?CRIID=" + id + "#pk"; };
+    $scope.crii = function (id) { return "default.html#!/CRITERIA?owner=" + $scope.oracle.owner + "&CRIID=" + id + "#pk"; };
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var search = $location.search();
@@ -38,8 +43,7 @@ mod.controller("rule", function ($scope, $http, $location) {
         notice("loading rule " + rule + "/" + language + " ...");
         $scope.workflow = {};
         $http({ url: url.rule + $scope.oracle.owner + "/" + rule, params: { language: language } })
-            .then(function (response) { $scope.rule = denormalize(response.data); $scope.closederrors++; })
-            .catch(error);
+            .then(function (response) { $scope.rule = denormalize(response.data); $scope.closederrors++; })["catch"](error);
         function denormalize(rule) {
             rule.rule = rule.rule[0];
             console.log(rule);
@@ -50,3 +54,4 @@ mod.controller("rule", function ($scope, $http, $location) {
         notice(r.data.ExceptionMessage || r.data.Message || r.data);
     }
 });
+//# sourceMappingURL=rule.js.map

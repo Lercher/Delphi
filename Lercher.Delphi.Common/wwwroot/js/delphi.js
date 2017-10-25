@@ -3,6 +3,11 @@
 // VS2015 - important 
 // Check Tools/Options/Typescript/Project/General - Automatically compile typescript files which are not part of a project
 // and look for "Output(s) generated successfully." in the status bar after saving this file
+// VS2017 - important 
+// Check Tools/Options/Text Editor/JavaScript|TypeScript/Project/Compile on Save
+// - Automatically compile typescript files which are not part of a project
+// - Use System code generation for modules which are not part of a project
+// and look for "Output(s) generated successfully." in the status bar after saving this file
 var mod = angular.module("delphiApp", ['dx']);
 mod.controller("delphi", function ($scope, $http, $location) {
     $scope.filter = { limit: 15 };
@@ -50,19 +55,25 @@ mod.controller("delphi", function ($scope, $http, $location) {
         console.log("$locationChangeSuccess -> " + $location.url());
         var path = $location.path();
         var hash = $location.hash();
+        var search = $location.search();
+        if (search.owner) {
+            $scope.oracle.owner = search.owner;
+            delete search.owner;
+        }
         if (path && hash === "pk") {
             var body = {
                 key: "",
-                pk: objectToKvArray($location.search()),
+                pk: objectToKvArray(search),
                 direction: "pk"
             };
             show_tabledata(path, body);
+            // TODO - single item display is not a database query yet
         }
         else if (path && hash && hash.indexOf(".") > 0) {
             var fkdir = hash.split(".", 2);
             var body = {
                 key: fkdir[0],
-                pk: objectToKvArray($location.search()),
+                pk: objectToKvArray(search),
                 direction: fkdir[1]
             };
             show_tabledata(path, body);
@@ -71,6 +82,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             show_tabledata(path);
         }
         else if (!path) {
+            // OK this is the start URL
         }
         else {
             $scope.error = "URL error: unrecognizable URL path " + $location.url();
@@ -127,8 +139,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             console.log($location.url());
             $scope.error = "following a link, loading data for " + tablename + " ...";
             $http({ method: "POST", url: url.tabledata + $scope.oracle.owner + "/" + tablename, data: body })
-                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })
-                .catch(error);
+                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })["catch"](error);
         }
         else {
             $location.hash(null);
@@ -136,8 +147,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
             console.log($location.url());
             $scope.error = "loading data for " + tablename + " ...";
             $http({ url: url.tabledata + $scope.oracle.owner + "/" + tablename })
-                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })
-                .catch(error);
+                .then(function (response) { $scope.oracle = response.data; $scope.error = null; })["catch"](error);
         }
     }
     function show_tables() {
@@ -145,8 +155,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
         $scope.oracle.table = null;
         $scope.tables = [];
         $http({ url: url.tables + $scope.oracle.owner })
-            .then(function (response) { $scope.tables = response.data; $scope.error = null; })
-            .catch(error);
+            .then(function (response) { $scope.tables = response.data; $scope.error = null; })["catch"](error);
     }
     function error(r) {
         $scope.error = r.data.ExceptionMessage || r.data.Message || r.data;
@@ -216,3 +225,4 @@ mod.directive("multipleitemTable", function () {
         templateUrl: "multipleitemTable.html"
     };
 });
+//# sourceMappingURL=delphi.js.map
