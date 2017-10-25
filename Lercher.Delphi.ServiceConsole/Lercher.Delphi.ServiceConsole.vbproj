@@ -132,6 +132,8 @@
   <PropertyGroup>
     <PostBuildEvent>md $(TargetDir)wwwroot\js\
 copy  $(SolutionDir)Lercher.Delphi.Common\wwwroot\js\*.js $(TargetDir)wwwroot\js\
+copy  $(SolutionDir)Lercher.Delphi.Common\wwwroot\js\*.map $(TargetDir)wwwroot\js\
+copy  $(SolutionDir)Lercher.Delphi.Common\wwwroot\js\*.ts $(TargetDir)wwwroot\js\
 if ($(ConfigurationName))==(Release) (
   echo release to \\ntsdtsc\leasing\bin\Delphi
   xcopy /s /e /y /c $(TargetDir)*  \\ntsdtsc\leasing\bin\Delphi
