@@ -17,9 +17,15 @@ Namespace Delphi
         <[Option]("c"c, "credentials", HelpText:="password to access the oracle database", Required:=true)>
         Public Property Password As String
 
+        <[Option]("x"c, "nocache", DefaultValue:=False, HelpText:="skip the startup FK query", Required:=False)>
+        Public Property nocache As Boolean
+
+        <[Option]("w"c, "webport", DefaultValue:=9001, HelpText:="Local port number for the web app", Required:=False)>
+        Public Property LocalPort As Integer
+
         <HelpOption>
         Public Function GetUsage() As String
-            Return CommandLine.Text.HelpText.AutoBuild(me).ToString
+            Return CommandLine.Text.HelpText.AutoBuild(Me).ToString
         End Function
     End Class
 End Namespace

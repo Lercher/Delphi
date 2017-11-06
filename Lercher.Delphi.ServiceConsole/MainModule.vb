@@ -16,10 +16,14 @@ Public Module MainModule
         Delphi.Common.Delphi.Query.Connection = options
         Console.Title = String.Format("{0} on {1} - Delphi", Delphi.Common.Delphi.Query.Connection.UserID, Delphi.Common.Delphi.Query.Connection.Host)
         Console.WriteLine()
-        Console.WriteLine("Prepopulating the foreign key cache for '{0}'. This can take some time (at least 15s in the LAN and 40s remote) ...", Delphi.Common.Delphi.Query.Connection.UserID)
-        'Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
+        If options.nocache Then
+            Console.WriteLine("nocache option (-x) is set, skipping prepopulation of the FK cache")
+        Else
+            Console.WriteLine("Prepopulating the foreign key cache for '{0}'. This can take some time (at least 15s in the LAN and 40s remote) ...", Delphi.Common.Delphi.Query.Connection.UserID)
+            Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
+        End If
         Console.WriteLine()
-        Dim url = "http://+:9001/delphi"
+        Dim url = String.Format("http://+:{0}/delphi", options.LocalPort)
         Try
             Using app = WebApp.Start(Of Common.Startup)(url)
                 Console.WriteLine("Listening on {0}/...", url)
@@ -42,6 +46,6 @@ Public Module MainModule
     End Sub
 
     Public Sub StartBrowser()
-        System.Diagnostics.Process.Start("http://localhost:9001/delphi/#!?owner=" & Delphi.Common.Delphi.Query.Connection.UserID)
+        System.Diagnostics.Process.Start(String.Format("http://localhost:{0}/delphi/#!?owner={1}", Delphi.Common.Delphi.Query.Connection.LocalPort, Delphi.Common.Delphi.Query.Connection.UserID))
     End Sub
 End Module
