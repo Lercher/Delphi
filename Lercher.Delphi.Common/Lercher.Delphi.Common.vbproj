@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Controller\RuleController.vb" />
     <Compile Include="Controller\EventController.vb" />
+    <Compile Include="Controller\ColumnController.vb" />
     <Compile Include="Controller\WorkflowFoController.vb" />
     <Compile Include="Controller\WorkflowController.vb" />
     <Compile Include="Controller\ValuesController.vb" />
@@ -149,6 +150,7 @@
     <Compile Include="Controller\TablesController.vb" />
     <Compile Include="Delphi\ConnectionOptions.vb" />
     <Compile Include="Delphi\Query.vb" />
+    <Compile Include="Delphi\Columns.vb" />
     <Compile Include="Delphi\Table.vb" />
     <Compile Include="Delphi\TableData.vb" />
     <Compile Include="Infrastructure\BaseController.vb" />
@@ -195,6 +197,9 @@
     <Content Include="wwwroot\Rule.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="wwwroot\Columns.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="wwwroot\WorkflowFO.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -227,6 +232,7 @@
     </Content>
     <TypeScriptCompile Include="wwwroot\js\d.ts\angular.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\rule.ts" />
+    <TypeScriptCompile Include="wwwroot\js\columns.ts" />
     <TypeScriptCompile Include="wwwroot\js\workflowfo.ts" />
     <TypeScriptCompile Include="wwwroot\js\workflow.ts" />
     <TypeScriptCompile Include="wwwroot\js\delphi.ts" />

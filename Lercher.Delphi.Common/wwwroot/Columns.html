@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-sanitize.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!--
+    <script src="https://ajax.aspnetcdn.com/ajax/globalize/0.1.1/globalize.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/15.2.4/js/dx.webappjs.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/15.2.4/css/dx.light.compact.css" />
+    -->
+    <style type="text/css">
+        th, td {
+            border-bottom: 1px solid #EEE;
+            border-right: 3px solid #DDD;
+            padding: 0px 5px 0px 5px;
+        }
+
+        th {
+            border-bottom: 2px solid #000;
+        }
+
+        td {
+            border-bottom: 1px solid #EEE;
+            vertical-align: text-top;
+        }
+
+        body {
+            /* HACK: http://stackoverflow.com/questions/24029359/horizontal-scrollbar-appearing-row-having-negative-margin */
+            overflow-x: hidden;
+        }
+
+        a {
+            cursor: pointer; /* a hand, even without an href */
+        }
+
+        footer {
+            margin-top: 6ex;
+            padding: 1ex;
+            background-color: lightgray;
+            font-size: small;
+        }
+    </style>
+    <script src="js/Columns.js"></script>
+    <title>Delphi Column Search Center - an oracle for data</title>
+</head>
+
+<body ng-app="delphiApp" ng-controller="columns">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10">                
+                <pre ng-show="error" ng-bind="error"></pre>
+
+                <h3>Table Column Search in '{{oracle.owner}}' <span ng-show="searchfor">for '{{searchfor}}'</span></h3>
+                <table ng-show="searchfor">
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Column name</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="c in list">
+                            <td>
+                                <a href="./#!{{c.tablename}}?owner={{oracle.owner}}" target="_blank">{{c.tablename}}</a>
+                            </td>
+                            <td>{{c.columnname}}</td>
+                            <td>{{c.comments}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-2">
+                <h2>{{oracle.owner}}</h2>
+                <form>
+                    <p>
+                        <label>Search:</label>
+                        <input ng-model="q" />
+                        <input type="submit" class="btn btn-primary" ng-click="set('q', q)" value="Show" />
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        see:
+        <a target="_blank" href="https://github.com/lercher/delphi">this project at GitHub</a>
+        |
+        <a target="_blank" href="https://angularjs.org/">AngularJS</a>
+        |
+        <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a>
+        |
+        and <a target="_blank" href="http://www.asp.net/web-api">Web API</a> at the backend
+    </footer>
+</body>
+</html>

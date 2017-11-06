@@ -17,7 +17,7 @@ Public Module MainModule
         Console.Title = String.Format("{0} on {1} - Delphi", Delphi.Common.Delphi.Query.Connection.UserID, Delphi.Common.Delphi.Query.Connection.Host)
         Console.WriteLine()
         Console.WriteLine("Prepopulating the foreign key cache for '{0}'. This can take some time (at least 15s in the LAN and 40s remote) ...", Delphi.Common.Delphi.Query.Connection.UserID)
-        Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
+        'Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
         Console.WriteLine()
         Dim url = "http://+:9001/delphi"
         Try
