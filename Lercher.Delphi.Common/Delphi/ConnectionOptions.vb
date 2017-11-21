@@ -23,6 +23,9 @@ Namespace Delphi
         <[Option]("w"c, "webport", DefaultValue:=9001, HelpText:="Local port number for the web app", Required:=False)>
         Public Property LocalPort As Integer
 
+        <[Option]("l"c, "limit", DefaultValue:=5000, HelpText:="Limit oracle server results to this much rows, 0=unlimited", Required:=False)>
+        Public Property LimitRows As Integer
+
         <HelpOption>
         Public Function GetUsage() As String
             Return CommandLine.Text.HelpText.AutoBuild(Me).ToString

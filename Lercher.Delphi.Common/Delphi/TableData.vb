@@ -10,10 +10,16 @@ Namespace Delphi
                 <x>
                     select * 
                     from <%= owner %>.<%= tablename %>
-                    where ROWNUM &lt; 5001
+                    <%= If(Query.Connection.LimitRows > 0, String.Format(" where ROWNUM <= {0} ", Query.Connection.LimitRows), " ") %>
                     order by 1
                 </x>
-            return Query.ExecuteDatatable(x)
+            Dim result = Query.ExecuteDatatable(x)
+            If Query.Connection.LimitRows > 0 Then
+                Console.WriteLine("Limit of max. {0:n0} rows applied to the last query (see -l option).", Query.Connection.LimitRows)
+            Else
+                Console.WriteLine("Warning: Unlimited number rows was requested.")
+            End If
+            Return result
         End Function
 
         Public Shared Function ValuesOf(owner As string, tablename As string, pk as IEnumerable(Of TableController.PKDef)) As DataTable
