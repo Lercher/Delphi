@@ -86,7 +86,7 @@
 
                         <div class="row" ng-switch-when="false" style="overflow-x: auto;">
                             <!-- an array of items -->
-                            <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; serversided max. 5000(default) rows</h3>
+                            <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; serversided max. row rules may apply (default 5000)</h3>
                             <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
                             <p>
                                 <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
