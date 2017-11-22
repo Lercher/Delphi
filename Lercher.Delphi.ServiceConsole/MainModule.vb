@@ -16,10 +16,14 @@ Public Module MainModule
         Delphi.Common.Delphi.Query.Connection = options
         Console.Title = String.Format("{0} on {1} - Delphi", Delphi.Common.Delphi.Query.Connection.UserID, Delphi.Common.Delphi.Query.Connection.Host)
         Console.WriteLine()
+        Console.WriteLine(Console.Title)
         If options.nocache Then
-            Console.WriteLine("nocache option (-x) is set, skipping prepopulation of the FK cache")
+            Console.WriteLine("nocache option (-x) is set, skipping prepopulation of the PK/FK cache")
         Else
-            Console.WriteLine("Prepopulating the foreign key cache for '{0}'. This can take some time (at least 15s in the LAN and 40s remote) ...", Delphi.Common.Delphi.Query.Connection.UserID)
+            Console.WriteLine("Prefilling some caches. This can take some time (at least 20s in the LAN and 60s remote), consider using -x option.")
+            Console.WriteLine("Prepopulating the primary key cache for '{0}' ...", Delphi.Common.Delphi.Query.Connection.UserID)
+            Console.WriteLine(Delphi.Common.Delphi.PKCache.Prepopulate())
+            Console.WriteLine("Prepopulating the foreign key cache for '{0}' ...", Delphi.Common.Delphi.Query.Connection.UserID)
             Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
         End If
         Console.WriteLine()

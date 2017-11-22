@@ -25,6 +25,8 @@ where owner=<p><%= owner %></p> and TABLE_NAME=<p><%= tablename %></p>
         End Function
 
         Public Shared Function PrimaryKeyColumns(owner As String, tablename As String) As String()
+            Dim cached = PKCache.PKs(owner, tablename)
+            If cached IsNot Nothing Then Return cached
             Dim x =
                 <x>
 SELECT c_src.COLUMN_NAME
