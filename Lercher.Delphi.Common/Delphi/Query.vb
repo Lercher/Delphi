@@ -68,8 +68,8 @@ Namespace Delphi
                 End Using
             Catch ex As OracleException
                 Dim msg = String.Format("{0} in {1}", ex.Message, cmdText)
-                Diagnostics.Trace.WriteLine(msg)
-                throw New ApplicationException(msg, ex)
+                Diagnostics.Trace.Fail(msg)
+                Throw New ApplicationException(msg, ex)
             Finally
                 sw.Stop
             End Try
