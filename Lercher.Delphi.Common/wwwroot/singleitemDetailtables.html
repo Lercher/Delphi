@@ -1,12 +1,13 @@
 ﻿<div>
     <h3>{{oracle.table}} Single Item &ndash; Detail Tables</h3>
+    <p><label>Filter:</label>&nbsp;<input ng-model="filter.detailsfilter"/></p>
     <ol>
-        <li ng-repeat="(n, fk) in oracle.details">
+        <li ng-repeat="(n, fk) in oracle.details" ng-show="fk.source.toUpperCase().indexOf(filter.detailsfilter.toUpperCase()) >= 0">
             <a ng-click="show.follow(r, fk, 'back');">&#9664;&nbsp;{{fk.source}}</a>
             ({{n}})
         </li>
     </ol>
     <p>
-        &ndash; End of list &ndash;
+        &ndash; End of list <span ng-show="filter.detailsfilter">filtered by <b>{{filter.detailsfilter}}</b></span> &ndash;
     </p>
 </div>
