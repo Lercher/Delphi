@@ -5,12 +5,13 @@ Namespace Delphi
         Public Shared Function Names(owner As String) As DataTable
             Dim x =
                 <x>
-select table_name as NAME, COALESCE(comments, '===') as DESCRIPTION
-from all_tab_comments
-where Upper(owner)=<p><%= owner.ToUpper %></p> 
-and not table_name like 'V45_%'
-and not table_name like 'TMP%'
-order by table_name
+select t.table_name as NAME, COALESCE(c.comments, '===') as DESCRIPTION, t.num_rows
+from all_tab_comments c 
+inner JOIN sys.dba_tables t on c.table_name = t.table_name and c.owner = t.owner
+where Upper(t.owner)=<p><%= owner.ToUpper %></p> 
+and not t.table_name like 'V45_%'
+and not t.table_name like 'TMP%'
+order by t.table_name
                 </x>
             Return Query.ExecuteDatatable(x)
         End Function

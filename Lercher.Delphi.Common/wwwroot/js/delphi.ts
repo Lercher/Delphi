@@ -15,7 +15,12 @@ declare var $: any;
 
 var mod = angular.module("delphiApp", ['dx']);
 mod.controller("delphi", function ($scope, $http, $location) {
-    $scope.filter = { limit: 15, detailsfilter: "" };
+    $scope.filter = {
+        limit: 15,
+        mincount: 0,
+        tables: "",
+        detailsfilter: ""
+    };
     $scope.show = {
         // only these function modify the $location
         tables: show_tables,

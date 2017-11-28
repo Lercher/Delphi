@@ -37,14 +37,19 @@
         <i>Try TRREADY45, AVREADY45</i>
     </p>
 
-    <p ng-show="tables[0]">
-        <label>Filter:</label>&nbsp;<input ng-model="filter.tables" />
-    </p>
+    <table ng-show="tables[0]">
+        <tr>
+            <td>Filter:</td><td><input ng-model="filter.tables" /></td>
+        </tr>
+        <tr>
+            <td>Min Count:</td><td><input type="number" ng-model="filter.mincount"/></td>
+        </tr>
+    </table>
 
     <ol>
-        <li ng-repeat="t in tables | filter: filter.tables">
+        <li ng-repeat="t in tables | filter: filter.tables" ng-show="t.NUM_ROWS >= filter.mincount">
             <div>
-                <a ng-click="show.tabledata(t.NAME);">{{t.NAME}}</a>
+                <a ng-click="show.tabledata(t.NAME);">{{t.NAME}} ({{t.NUM_ROWS}})</a>
             </div>
             <div ng-bind="t.DESCRIPTION" style="font-size: 66%;" ng-show="t.DESCRIPTION != '==='"></div>
         </li>
