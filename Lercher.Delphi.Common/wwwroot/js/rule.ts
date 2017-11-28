@@ -38,7 +38,7 @@ mod.controller("rule", function ($scope, $http, $location) {
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var search: any = $location.search();
-        $scope.oracle.owner = search.owner || "TRREADY45";
+        $scope.oracle.owner = search.owner || "TRunknown";
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.rule = search.rule || "";
         $scope.errors = [];

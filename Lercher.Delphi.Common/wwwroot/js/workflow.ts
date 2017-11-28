@@ -40,7 +40,7 @@ mod.controller("workflow", function ($scope, $http, $location) {
         var search: any = $location.search();
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.target = search.target || "AVDOSS";
-        var owner: string = search.owner || "TRREADY45";
+        var owner: string = search.owner || "TRunknown";
         $scope.errors = [];
         $scope.closederrors = 0;
         if ($scope.oracle.owner !== owner) {

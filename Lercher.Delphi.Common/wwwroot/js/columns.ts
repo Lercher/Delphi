@@ -35,7 +35,7 @@ mod.controller("columns", function ($scope, $http, $location) {
     $scope.$on('$locationChangeSuccess', function () {
         console.log("$locationChangeSuccess -> " + $location.url());
         var search: any = $location.search();
-        var owner: string = search.owner || "TRREADY45";
+        var owner: string = search.owner || "TRunknown";
         var q: string = search.q || null;
         $scope.oracle.owner = owner;
         $scope.searchfor = q;

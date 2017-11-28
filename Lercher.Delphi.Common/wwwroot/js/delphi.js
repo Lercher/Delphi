@@ -24,7 +24,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
         restrict: show_restrict
     };
     $scope.isObject = angular.isObject; // has to be a scope function to use it in a ng-switch directive
-    $scope.oracle = { owner: "TRREADY45" };
+    $scope.oracle = { owner: "TRunknown" };
     $scope.error = null;
     $scope.tables = [];
     $scope.gridSettings = {};
@@ -104,19 +104,21 @@ mod.controller("delphi", function ($scope, $http, $location) {
     function show_follow(r, fk, direction) {
         // alert("Show the one " + fk.destination + " where " + fk.matchcolumn[0].dest + " = " + r[fk.matchcolumn[0].src] + " ... by " + fk.key + " with " + fk.matchcolumn.length + " match(es))");
         var body = { key: fk.key, pk: buildPK(r), direction: direction };
-        show_tabledata($scope.oracle.table, body);
+        show_tabledata($scope.oracle.owner, $scope.oracle.table, body);
     }
-    function show_tabledata(tablename, body) {
+    function show_tabledata(owner, tablename, body) {
         if (body === void 0) { body = undefined; }
         $location.path(tablename); // table as PATH
         if (body) {
             var hash = body.key ? body.key + '.' + body.direction : body.direction;
             $location.hash(hash); // foreign key constraint name + . + forward/back or pk as HASH
-            $location.search(kvArrayToObject(body.pk)); // the primary keys as SEARCH
+            var se = kvArrayToObject(body.pk);
+            se['owner'] = owner;
+            $location.search(se); // the primary keys as SEARCH
         }
         else {
             $location.hash(null);
-            $location.search({});
+            $location.search({ owner: owner });
         }
     }
     ;

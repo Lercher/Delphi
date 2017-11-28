@@ -9,7 +9,7 @@
         </tr>
         <tr ng-repeat="(n, r) in oracle.details">
             <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.dest"></div></td>
-            <td>&#9664; <a ng-click="show.tabledata(r.source);" ng-bind="r.source"></a></td>
+            <td>&#9664; <a ng-click="show.tabledata(oracle.owner, r.source);" ng-bind="r.source"></a></td>
             <td><div ng-repeat="m in r.matchcolumn" ng-bind="m.src"></div></td>
             <td ng-bind="n" style="font-size: 66%;"></td>
         </tr>

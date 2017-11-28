@@ -43,7 +43,7 @@ mod.controller("workflowfo", function ($scope, $http, $location, $uibModal, $log
         $scope.highlight = search.hl || "(none)";
         $scope.oracle.language = search.language || "EN";
         $scope.oracle.workflow = search.workflow || "WFALLGOOD";
-        var owner: string = search.owner || "TRREADY45";
+        var owner: string = search.owner || "TRunknown";
         $scope.errors = [];
         $scope.closederrors = 0;
         if ($scope.oracle.owner !== owner) {
