@@ -90,6 +90,7 @@
                             <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
                             <p>
                                 <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
+                                <span class="text-danger" ng-hide="oracle.pk.length">Error: no PK columns present. Unable to navigate.</span>
                             </p>
 
                             <multipleitem-dxgrid ng-show="displaygrid"></multipleitem-dxgrid>
