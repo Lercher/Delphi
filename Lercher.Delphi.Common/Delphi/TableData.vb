@@ -22,7 +22,8 @@ Namespace Delphi
             Return result
         End Function
 
-        Public Shared Function ValuesOf(owner As string, tablename As string, pk as IEnumerable(Of TableController.PKDef)) As DataTable
+        Public Shared Function ValuesOf(owner As String, tablename As String, pk As IEnumerable(Of TableController.PKDef)) As DataTable
+            If pk Is Nothing OrElse Not pk.Any Then Throw New ApplicationException(String.Format("Can't query TableData.ValuesOf for table {0}.{1} with missing PK and therefor no PK values.", owner, tablename))
             Query.AssertIdentifier(owner, NameOf(owner))
             Query.AssertIdentifier(tablename, NameOf(tablename))
             Dim x =
@@ -30,11 +31,11 @@ Namespace Delphi
                     select * 
                     from <%= owner %>.<%= tablename %>
                     where ROWNUM &gt; -1
-                    <%= from p in pk Select _
+                    <%= From p In pk Select
                        <text> AND <%= p.key %> = <p><%= p.value %></p></text>
                     %>
                 </x>
-            return Query.ExecuteDatatable(x)
+            Return Query.ExecuteDatatable(x)
         End Function
 
         Public Shared Function FollowFK(owner As String, tablename As string, fkname as string, pk as TableController.PKDef(), isForwardDirection As Boolean) As RichtableDescription
