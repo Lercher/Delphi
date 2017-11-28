@@ -9,22 +9,22 @@ Namespace Delphi
         Private Const STR_PARAM_FORMAT_COMMAND As String = ":p{0}"
         Private Const STR_PARAM_FORMAT_VALUE As String = "p{0}"
 
-        Private shared readonly IdentifierExpression As Regex = New Regex("^[a-z][a-z0-9$_]{0,30}$", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
+        Private Shared ReadOnly IdentifierExpression As Regex = New Regex("^[a-z][a-z0-9$_]{0,30}$", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
         '2012-06-15T00:00:00
-        Private shared readonly DatetimeExpression As Regex = New Regex("^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
+        Private Shared ReadOnly DatetimeExpression As Regex = New Regex("^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
 
-        Public shared Connection As ConnectionOptions
+        Public Shared Connection As ConnectionOptions
 
         Public Shared Sub AssertIdentifier(s As String, paramname As String)
             If IdentifierExpression.IsMatch(s) Then Return
             Throw New ArgumentException("Identifier expected", paramname)
         End Sub
 
-        Private Shared Function isDatetime(s as string) as Boolean
-            return DatetimeExpression.IsMatch(s)
+        Private Shared Function isDatetime(s As String) As Boolean
+            Return DatetimeExpression.IsMatch(s)
         End Function
 
-        Public Shared Function ExecuteDatatable(cmdText As String, params() as string) As DataTable
+        Public Shared Function ExecuteDatatable(cmdText As String, params() As String) As DataTable
             Dim sw = Stopwatch.StartNew
             Try
                 Dim cb = New OracleConnectionStringBuilder()
@@ -72,7 +72,7 @@ Namespace Delphi
                 Console.Beep()
                 Throw New ApplicationException(msg, ex)
             Finally
-                sw.Stop
+                sw.Stop()
             End Try
         End Function
 
@@ -84,13 +84,13 @@ Namespace Delphi
         End Function
 
         Private Shared Sub AppendNodes(ByVal sb As System.Text.StringBuilder, ByVal p As System.Collections.Generic.List(Of String), ByVal nodes As IEnumerable(Of XNode))
-            For each n In nodes
-                If TypeOf n Is XText then
+            For Each n In nodes
+                If TypeOf n Is XText Then
                     Dim t = DirectCast(n, XText)
                     sb.Append(t.Value)
-                Else If TypeOf n Is XElement then
+                ElseIf TypeOf n Is XElement Then
                     Dim e = DirectCast(n, XElement)
-                    if e.Name.LocalName = "text" then
+                    If e.Name.LocalName = "text" Then
                         AppendNodes(sb, p, e.Nodes)
                     Else
                         p.Add(e.Value)
