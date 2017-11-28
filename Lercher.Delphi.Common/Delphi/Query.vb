@@ -14,6 +14,8 @@ Namespace Delphi
         Private Shared ReadOnly DatetimeExpression As Regex = New Regex("^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
 
         Public Shared Connection As ConnectionOptions
+        Public Shared ReadOnly TimingStatistics As New Concurrent.ConcurrentDictionary(Of Integer, Integer)
+        Public Shared ReadOnly TimingClassDivisor As Double = 100.0 'ms
 
         Public Shared Sub AssertIdentifier(s As String, paramname As String)
             If IdentifierExpression.IsMatch(s) Then Return
@@ -61,8 +63,8 @@ Namespace Delphi
                         Dim da = New OracleDataAdapter(cmd)
                         da.Fill(tbl)
                         sw.Stop()
-                        Diagnostics.Trace.WriteLine(String.Format("{0:n0} line(s) affected. Processing time: {1}", tbl.Rows.Count, sw.Elapsed))
-                        Diagnostics.Trace.WriteLine("------------")
+                        Dim stats = RecordTiming(sw.Elapsed)
+                        Diagnostics.Trace.WriteLine(String.Format("----- {0:n0} line(s) affected. Processing time: {1}. Stats: {2}", tbl.Rows.Count, sw.Elapsed, stats))
                         Return tbl
                     End Using
                 End Using
@@ -75,6 +77,17 @@ Namespace Delphi
                 sw.Stop()
             End Try
         End Function
+
+        Private Shared Function RecordTiming(ts As TimeSpan) As String
+            Try
+                Dim el = ts.TotalMilliseconds
+                Dim discrete = CInt(Math.Round(el / TimingClassDivisor) * TimingClassDivisor)
+                TimingStatistics.AddOrUpdate(discrete, 1, Function(k, v) v + 1)
+                Dim qy = From kv In TimingStatistics Order By kv.Key Select s = String.Format("{1:n0}x{0:n0}ms", kv.Key, kv.Value)
+                Return Join(qy.ToArray, " | ")
+            Finally : End Try
+        End Function
+
 
         Public Shared Function ExecuteDatatable(cmdText As XElement) As DataTable
             Dim sb As New System.Text.StringBuilder
