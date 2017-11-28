@@ -81,9 +81,10 @@ Namespace Delphi
         Private Shared Function RecordTiming(ts As TimeSpan) As String
             Try
                 Dim el = ts.TotalMilliseconds
-                Dim discrete = CInt(Math.Round(el / TimingClassDivisor) * TimingClassDivisor)
+                Const more = 5000
+                Dim discrete = Math.Min(more, CInt(Math.Round(el / TimingClassDivisor) * TimingClassDivisor))
                 TimingStatistics.AddOrUpdate(discrete, 1, Function(k, v) v + 1)
-                Dim qy = From kv In TimingStatistics Order By kv.Key Select s = String.Format("{1:n0}x{0:n0}ms", kv.Key, kv.Value)
+                Dim qy = From kv In TimingStatistics Order By kv.Key Select s = String.Format(If(kv.Key = more, "{1:n0} more", "{1:n0}x{0:n0}ms"), kv.Key, kv.Value)
                 Return Join(qy.ToArray, " | ")
             Finally : End Try
         End Function
