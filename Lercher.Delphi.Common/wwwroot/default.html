@@ -41,6 +41,10 @@
             cursor: pointer; /* a hand, even without an href */
         }
 
+        label.fixed {
+            width: 6em;
+        }
+
         footer {
             margin-top: 6ex;
             padding: 1ex;
@@ -57,49 +61,49 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <pre ng-show="error" ng-bind="error"></pre>
-
-                <div class="row" ng-show="displaymetadata">
-                    <div class="col-md-6">
-                        <outgoing-links></outgoing-links>
-                    </div>
-                    <div class="col-md-6">
-                        <incoming-links></incoming-links>
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <!--<pre ng-show="oracle.metadata" ng-bind="oracle.metadata|json"></pre>-->
-                    <!-- Note: currently we support even overlapping columns in FK Links, e.g. AAGRVE and FACTURE have some -->
-                    <div class="col-md-12" ng-show="oracle.values" ng-switch="oracle.values.length === 1">
-
-                        <div class="row" ng-switch-when="true" ng-repeat="r in oracle.values">
-                            <!-- single item -->
-                            <div class="col-md-6">
-                                <singleitem-data></singleitem-data>
-                            </div>
-                            <div class="col-md-6">
-                                <singleitem-detailtables></singleitem-detailtables>
-                            </div>
+                <pre ng-show="error" ng-bind="error" class="bg-warning" style="position: fixed; left: 2em; top: 2em; z-index: 3;"></pre>
+                <div ng-class="{'text-muted': error}">
+                    <div class="row" ng-show="displaymetadata">
+                        <div class="col-md-6">
+                            <outgoing-links></outgoing-links>
                         </div>
-
-                        <div class="row" ng-switch-when="false" style="overflow-x: auto;">
-                            <!-- an array of items -->
-                            <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; serversided max. row rules may apply (default 5000)</h3>
-                            <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
-                            <p>
-                                <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
-                                <span class="text-danger" ng-hide="oracle.pk.length">Error: no PK columns present. Unable to navigate.</span>
-                            </p>
-
-                            <multipleitem-dxgrid ng-show="displaygrid"></multipleitem-dxgrid>
-                            <multipleitem-table ng-hide="displaygrid"></multipleitem-table>
-
+                        <div class="col-md-6">
+                            <incoming-links></incoming-links>
                         </div>
                     </div>
-                </div>
 
+                    <div class="row">
+
+                        <!--<pre ng-show="oracle.metadata" ng-bind="oracle.metadata|json"></pre>-->
+                        <!-- Note: currently we support even overlapping columns in FK Links, e.g. AAGRVE and FACTURE have some -->
+                        <div class="col-md-12" ng-show="oracle.values" ng-switch="oracle.values.length === 1">
+
+                            <div class="row" ng-switch-when="true" ng-repeat="r in oracle.values">
+                                <!-- single item -->
+                                <div class="col-md-6">
+                                    <singleitem-data></singleitem-data>
+                                </div>
+                                <div class="col-md-6">
+                                    <singleitem-detailtables></singleitem-detailtables>
+                                </div>
+                            </div>
+
+                            <div class="row" ng-switch-when="false" style="overflow-x: auto;">
+                                <!-- an array of items -->
+                                <h3>{{oracle.table}} &ndash; {{oracle.values.length}} Row(s) &ndash; serversided max. row rules may apply (default 5000)</h3>
+                                <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+                                <p>
+                                    <i>PK</i><span ng-repeat="c in oracle.pk track by $index"> &ndash; {{c}}</span>
+                                    <span class="text-danger" ng-hide="oracle.pk.length">Error: no PK columns present. Unable to navigate.</span>
+                                </p>
+
+                                <multipleitem-dxgrid ng-show="displaygrid"></multipleitem-dxgrid>
+                                <multipleitem-table ng-hide="displaygrid"></multipleitem-table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-2">

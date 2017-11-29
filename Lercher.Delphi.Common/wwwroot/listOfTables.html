@@ -27,24 +27,22 @@
 
     <form>
         <p>
-            <label>Oracle Owner</label>
+            <label class="fixed">Owner:</label>
             <input ng-model="oracle.owner" />
             <input type="submit" class="btn btn-primary" ng-click="show.tables()" value="Show" />
+            <input type="submit" class="btn btn-primary" ng-click="tables=[]" value="Hide" />
+            <br />
+            <i>Hint: Try TRREADY45, AVREADY45</i>
         </p>
     </form>
 
-    <p>
-        <i>Try TRREADY45, AVREADY45</i>
+    <p ng-show="tables[0]">
+        <label class="fixed">Filter:</label>
+        <input ng-model="filter.tables" />
+        <br />
+        <label class="fixed">Min Count:</label>
+        <input type="number" ng-model="filter.mincount"/>
     </p>
-
-    <table ng-show="tables[0]">
-        <tr>
-            <td>Filter:</td><td><input ng-model="filter.tables" /></td>
-        </tr>
-        <tr>
-            <td>Min Count:</td><td><input type="number" ng-model="filter.mincount"/></td>
-        </tr>
-    </table>
 
     <ol>
         <li ng-repeat="t in tables | filter: filter.tables" ng-show="t.NUM_ROWS >= filter.mincount">
