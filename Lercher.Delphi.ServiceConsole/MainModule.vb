@@ -31,11 +31,13 @@ Public Module MainModule
                 Console.WriteLine()
                 Dim cmd = ""
                 Do
-                    Console.Write("b - open browser. Press Enter to stop ... ")
+                    Console.Write("b - open browser, c - clear. Press Enter to stop ... ")
                     cmd = Console.ReadLine()
                     Select Case cmd
                         Case "b"
                             StartBrowser()
+                        Case "c"
+                            Console.Clear()
                     End Select
                 Loop Until String.IsNullOrEmpty(cmd)
             End Using
@@ -64,7 +66,7 @@ Public Module MainModule
         Next
         Console.ForegroundColor = fc
         Console.WriteLine()
-        Console.Write("b - open browser. Press Enter to stop ... ")
+        Console.Write("b - open browser, c - clear. Press Enter to stop ... ")
     End Sub
 
     Public Sub StartBrowser()
