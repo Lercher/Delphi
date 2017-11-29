@@ -198,8 +198,11 @@ mod.controller("delphi", function ($scope, $http, $location) {
             paging: { pageSize: 15 },
             filterRow: { visible: true },
             searchPanel: { visible: true },
-            selection: { mode: 'single' }
-        }
+            selection: { mode: 'single' },
+            rowAlternationEnabled: true,
+            onSelectionChanged: selectedItems =>
+                $scope.selectedRow = selectedItems.selectedRowsData[0]
+        };
     }
 });
 

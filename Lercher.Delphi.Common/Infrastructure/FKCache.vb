@@ -49,7 +49,7 @@ AND
 (
   c_list.OWNER = <p><%= owner %></p>
   OR
-  c_dest.OWNER = <p><%= owner %></p>
+  c_list.R_OWNER = <p><%= owner %></p>
 )
                 </x>
             ' Don't ORDER BY this on the server, it probably don't have space for this on disk
