@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("Lercher.Delphi.ServiceConsole")>
-<Assembly: AssemblyCopyright("Copyright ©  2015")>
+<Assembly: AssemblyCopyright("Copyright (C) 2015-2018 M. Lercher")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
