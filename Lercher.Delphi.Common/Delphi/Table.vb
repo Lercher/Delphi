@@ -25,6 +25,17 @@ where owner=<p><%= owner %></p> and TABLE_NAME=<p><%= tablename %></p>
             Return Query.ExecuteDatatable(x)
         End Function
 
+        Public Shared Function HeapTables(owner As String) As String()
+            Dim dt = Names(owner)
+            Dim nameindex = dt.Columns("NAME").Ordinal
+            Dim qy =
+                From r In dt.Rows.Cast(Of DataRow)
+                Select tablename = r.Item(nameindex).ToString
+                Where Not PrimaryKeyColumns(owner, tablename).Any
+                Select String.Concat(owner, ".", tablename)
+            Return qy.ToArray
+        End Function
+
         Public Shared Function PrimaryKeyColumns(owner As String, tablename As String) As String()
             Dim cached = PKCache.PKs(owner, tablename)
             If cached IsNot Nothing Then Return cached

@@ -7,7 +7,7 @@ Public Module MainModule
         Console.WriteLine("This is Delphi, an Oracle for Data. 2016-2017 M. Lercher")
         Console.WriteLine(My.Computer.FileSystem.CurrentDirectory)
         Dim options = New Delphi.Common.Delphi.ConnectionOptions
-        if Not CommandLine.Parser.Default.ParseArguments(args, options) Then
+        If Not CommandLine.Parser.Default.ParseArguments(args, options) Then
             'Console.WriteLine(options.GetUsage())
             Environment.ExitCode = 99
             Return
@@ -25,6 +25,18 @@ Public Module MainModule
             Console.WriteLine(Delphi.Common.Delphi.PKCache.Prepopulate())
             Console.WriteLine("Prepopulating the foreign key cache for '{0}' ...", Delphi.Common.Delphi.Query.Connection.UserID)
             Console.WriteLine(Delphi.Common.Delphi.FKCache.Prepopulate())
+            Console.WriteLine()
+            Console.WriteLine("Checking for Heap tables, i.e. without PK ...")
+            Dim hts = Delphi.Common.Delphi.Table.HeapTables(Delphi.Common.Delphi.Query.Connection.UserID)
+            Dim fc = Console.ForegroundColor
+            Console.ForegroundColor = ConsoleColor.Red
+            Dim n = 0
+            For Each ht In hts
+                n += 1
+                Console.WriteLine("{0,4}. {1}", n, ht)
+            Next
+            Console.ForegroundColor = fc
+            Console.WriteLine()
         End If
         Console.WriteLine()
         Dim url = String.Format("http://+:{0}/delphi", options.LocalPort)
@@ -38,7 +50,7 @@ Public Module MainModule
                     cmd = Console.ReadLine()
                     Select Case cmd
                         Case "b"
-                            StartBrowser
+                            StartBrowser()
                     End Select
                 Loop Until String.IsNullOrEmpty(cmd)
             End Using
