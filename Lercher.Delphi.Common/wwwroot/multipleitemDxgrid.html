@@ -7,5 +7,10 @@
             http://js.devexpress.com/Documentation/Guide/UI_Widgets/UI_Widget_Categories/Collection_Container_Widgets/?version=15_1#UI_Widgets_UI_Widget_Categories_Collection_Container_Widgets_Common_Tasks_Customize_an_Item_Appearance_Specify_a_Template Specify a template
         -->
     </div>
-    <pre ng-show="selectedRow">{{selectedRow|json: true }}</pre>
+    <div ng-show="selectedRow">
+        <p>
+            <button class="btn btn-primary" ng-click="show.restrict(selectedRow)">Open selected item</button>
+        </p>
+        <pre>{{selectedRow|json: true }}</pre>
+    </div>
 </div>

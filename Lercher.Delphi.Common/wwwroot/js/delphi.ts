@@ -98,6 +98,7 @@ mod.controller("delphi", function ($scope, $http, $location) {
     });
 
     function show_restrict(r) {
+        $scope.selectedRow = null;
         $scope.oracle.values = [r];
         var pk = buildPK(r);
         $location.path($scope.oracle.table);
