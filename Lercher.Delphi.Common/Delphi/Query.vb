@@ -33,7 +33,7 @@ Namespace Delphi
                 cb.DataSource = String.Format("{0}:{1}/{2}", Connection.Host, Connection.Port, Connection.SID)
                 cb.UserID = Connection.UserID
                 cb.Password = "***"
-                cb.ConnectionTimeout = 5
+                cb.ConnectionTimeout = 15
                 Diagnostics.Trace.WriteLine("")
                 Diagnostics.Trace.WriteLine("")
                 Diagnostics.Trace.WriteLine(String.Format("Connecting to Oracle DB: {0} ...", cb))
