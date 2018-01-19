@@ -157,6 +157,7 @@
     <Compile Include="Infrastructure\PKCache.vb" />
     <Compile Include="Infrastructure\FKCache.vb" />
     <Compile Include="Infrastructure\Startup.vb" />
+    <Compile Include="Model\PhysicalModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -195,6 +196,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Model\BackPhysicalModelSample.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Model\TransformPhysicalModel.xslt" />
     <Content Include="wwwroot\Rule.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

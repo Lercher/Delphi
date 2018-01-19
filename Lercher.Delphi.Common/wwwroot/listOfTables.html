@@ -50,6 +50,7 @@
                 <a ng-click="show.tabledata(oracle.owner, t.NAME);">{{t.NAME}} ({{t.NUM_ROWS}})</a>
             </div>
             <div ng-bind="t.DESCRIPTION" style="font-size: 66%;" ng-show="t.DESCRIPTION != '==='"></div>
+            <div ng-bind="t.pdmComment" style="font-size: 66%;" ng-show="t.DESCRIPTION == '==='"></div>
         </li>
     </ol>
 </div>

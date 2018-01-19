@@ -26,6 +26,9 @@ Namespace Delphi
         <[Option]("l"c, "limit", DefaultValue:=5000, HelpText:="Limit oracle server results to this much rows, 0=unlimited", Required:=False)>
         Public Property LimitRows As Integer
 
+        <[Option]("m"c, "models", HelpText:="directory for *.cdm and *.pdm PowerBuilder Model files", Required:=False, DefaultValue:="\\ntsdtsc\leasing\1WINWORD\01Cassiopae\005 - Development\DatabaseSchema\Model")>
+        Public Property Modeldirectory As String
+
         <HelpOption>
         Public Function GetUsage() As String
             Return CommandLine.Text.HelpText.AutoBuild(Me).ToString

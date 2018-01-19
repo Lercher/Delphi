@@ -18,6 +18,9 @@ Public Module MainModule
         Console.WriteLine()
         Console.WriteLine(Console.Title)
 
+        Console.WriteLine("Loading physical model files from: {0}", Query.Connection.Modeldirectory)
+        Console.WriteLine(Common.PhysicalModel.LoadAllPdmFrom(Query.Connection.Modeldirectory))
+
         If Query.Connection.nocache Then
             Console.WriteLine("nocache option (-x) is set, skipping prepopulation of the PK/FK cache")
         Else

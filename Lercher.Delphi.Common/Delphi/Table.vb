@@ -16,6 +16,19 @@ order by t.table_name
             Return Query.ExecuteDatatable(x)
         End Function
 
+        Public Shared Function Description(owner As String, tablename As String) As String
+            Dim x =
+                <x>
+select c.comments as DESCRIPTION
+from all_tab_comments c 
+inner JOIN sys.dba_tables t on c.table_name = t.table_name and c.owner = t.owner
+where Upper(t.owner)=<p><%= owner.ToUpperInvariant %></p> 
+and Upper(t.table_name)=<p><%= tablename.ToUpperInvariant %></p>
+                </x>
+            Dim ar = Query.ExecuteArray(x)
+            Return ar.FirstOrDefault()
+        End Function
+
         Public Shared Function Columns(owner As String, tablename As String) As DataTable
             Dim x =
                 <x>

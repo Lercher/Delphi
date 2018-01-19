@@ -40,11 +40,26 @@ mod.controller("delphi", function ($scope, $http, $location) {
     $scope.descriptionOf = c => {
         var ar = $scope.oracle.columns;
         for (var i = 0; i < ar.length; i++) {
-            if (ar[i].NAME === c)
-                return ar[i].DESCRIPTION;
+            if (ar[i].NAME === c) {
+                var comment = ar[i].DESCRIPTION || ar[i].pdmComment;
+                var annotation = ar[i].pdmAnnotation;
+                if (annotation)
+                    return comment + " (" + annotation + ")";
+                return comment;
+            }
         }
         return null;
     };
+
+    $scope.typeOf = c => {
+        var ar = $scope.oracle.columns;
+        for (var i = 0; i < ar.length; i++) {
+            if (ar[i].NAME === c)
+                return ar[i].pdmType;
+        }
+        return null;
+    };
+
     $scope.linksof = c => {
         var r = [];
         var l = $scope.oracle.links
@@ -102,7 +117,9 @@ mod.controller("delphi", function ($scope, $http, $location) {
         $scope.oracle.values = [r];
         var pk = buildPK(r);
         $location.path($scope.oracle.table);
-        $location.search(kvArrayToObject(pk));
+        var se = kvArrayToObject(pk);
+        se['owner'] = $scope.oracle.owner;
+        $location.search(se);
         $location.hash("pk");
         console.log($location.url());
     }

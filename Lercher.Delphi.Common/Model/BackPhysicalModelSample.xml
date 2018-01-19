@@ -1,0 +1,944 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<physical>
+  <model>
+    <name>CASSIOPEE V3</name>
+    <tables>
+      <table>
+        <name>DOSSIER</name>
+        <comment>This table is the mother of all tables of this contract. It contains every contract, initial, committed, in operation or terminated.</comment>
+        <annotation>
+          Contrôles effectués en saisie de contrat :
+
+          N° contrat + avenant unique et obligatoire.
+          Date de notification &gt;= Date passage en comité.
+          Durées ( ans, mois, jours ) mini = 0; maxi = 999.
+          Marge prévue comprise entre 0 et 99.999999 %.
+          Taux négocié compris entre 0 et 99.999999 %.
+          Pourcentage VR facturé compris entre 0 et 99 %
+          Nombre de mois de préavis compris entre 0 et 999.
+          Total financement &lt;= Montant autorisé.
+          Unicité intervenant et Rôle joué pour 1 contrat.
+          Unicité Code statistique pour 1 contrat et 1 valeur prédéfinie ou libre obligatoire.
+          Indexation / Actualisation :
+          Part fixe comprise entre 0 et 99 %
+          Total part fixe + Quote part chaque indices = 100.
+          Indice unique dans la composition.
+          Si Indexation, périodicité de révision obligatoire.
+          Si Méthode d'indexation # indices multiple, valeur initiale obligatoire; sinon valeur initiale           de chaque indice obligatoire. La valeur initiale est toujours positive.
+          Pour chaque indice exprimé, quote part et référence d'application obligatoire.
+          Plancher et plafond compris entre 0 et 999 %
+          Pool :
+          Nom de pool unique pour un contrat.
+          Base du pool obligatoire.
+          Si pas d'assiette de préciput, la zone préciput des partenaires n'est pas active.
+          Le partenaire est unique pour le pool.
+          Total des quote parts partenaires = Base du pool.
+          Au moins 2 partenaires dont 1 partenaire chef de file et un seul.
+
+          Détail tiers :
+          Code et libellé court acteurs existent dans la table acteur.
+          Client facturé, facturation avancée délais avance et échu compris entre 0 et 999.
+          Date de début &gt;= Date début de contrat ( ou date prévue ).
+          Role et adresse obligatoires.
+          Si rôle = Client facturé : Mode d'encaissement obligatoire.
+          Si rôle = Fournisseur ou flag rétribution activé : Mode décaissement obligatoire.
+          Si mode encaissement ou décaissement renseigné et différent de Chèque, RIB obligatoire.
+
+          Divers :
+          Crtitères CBI valeurs ( nombre de salariés, total bilan, Chiffre d'affaires, Capital )          contrôlées par rapport à la table 'CBICRITERESRF'
+
+          Rubriques flux :
+          Acteur obligatoire
+          Si option Assiette*Taux pour les accessoires : Quote part &gt; 0.
+          Taux fixé exclusif de taux variable.
+          Taux fixé compris entre 1 et 99%
+          Nombre de périodes pour saisons ou flux, nombre de loyers contants, nombre de          périodes d'intérêt : compris entre 1 et 999
+          Si montage = AMOFIX ou FISCAL : Taux fixé ou taux variable obligatoire.
+          Si montage = Fiscal
+          Règle d'amortissement fiscal : Montant, Loi et durée obligatoires.
+          Somme des assiettes = Valeur Origine - Valeur résiduelle.
+          Si rubrique financière : Valeur résiduelle &lt; Valeur d'origine.
+          FLUX :
+          Taux appliqué à l'assiette compris entre 0 et 999% et obligatoire.
+          Coefficient de progression compris entre -100 et +100%
+          Nombre d'échéances en franchise, nombre de jours de déclage si perception décalée.
+        </annotation>
+        <description-rtf>
+          {\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+          \viewkind4\uc1\pard\f0\fs20\b insert : \par
+          \b0 Thru UI according to user's rights, API contract boarding and WS\par
+          \b delete :\par
+          \b0 Thru UI according to user's rights\par
+          \b update : \par
+          \b0 Thru UI according to user's rights\par
+          }
+        </description-rtf>
+        <fields>
+          <field>
+            <name>DOSID</name>
+            <type>NUMBER</type>
+            <comment>Contract of file ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DEVCODE</name>
+            <type>VARCHAR2(3 CHAR)</type>
+            <comment>Contract currency code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>ACTID</name>
+            <type>NUMBER</type>
+            <comment>Actor ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>UTICODE</name>
+            <type>VARCHAR2(30 CHAR)</type>
+            <comment>User code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>TACCODE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Contract business type code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSNUM</name>
+            <type>VARCHAR2(30 CHAR)</type>
+            <comment>Contract external</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSNOM</name>
+            <type>VARCHAR2(200 CHAR)</type>
+            <comment>Contract name</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>MANID</name>
+            <type>NUMBER</type>
+            <comment>Mandate ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSAVENANT</name>
+            <type>NUMBER(2)</type>
+            <comment>Amendment number</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSETAT</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Contract status</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEJOUR</name>
+            <type>NUMBER(3)</type>
+            <comment>Term in days</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEMOIS</name>
+            <type>NUMBER(3)</type>
+            <comment>Term in months</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEAN</name>
+            <type>NUMBER(3)</type>
+            <comment>Term in years</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTDEB</name>
+            <type>DATE</type>
+            <comment>Contract start date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTFIN</name>
+            <type>DATE</type>
+            <comment>Contract end date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTMODIF</name>
+            <type>DATE</type>
+            <comment>Date last updated</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTSIGNE</name>
+            <type>DATE</type>
+            <comment>Date of signature</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTOPACHAT</name>
+            <type>DATE</type>
+            <comment>Put option date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTCOMITE</name>
+            <type>DATE</type>
+            <comment>committee approval date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTEFFET</name>
+            <type>DATE</type>
+            <comment>Anticipated lease start date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTOUVERT</name>
+            <type>DATE</type>
+            <comment>Contract first entry date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTPRODUCT</name>
+            <type>DATE</type>
+            <comment>Notification of start of regular payments date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPREAVIS</name>
+            <type>NUMBER(3)</type>
+            <comment>Prior notice of early termination in months</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTYPEPENALITE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Type of early buy back penalty</comment>
+            <annotation>table utilisateur PENALITERACHAT</annotation>
+          </field>
+          <field>
+            <name>DOSMTPENALITE</name>
+            <type>NUMBER</type>
+            <comment>Penalty amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSREGIMEFISCAL</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Fiscal regime</comment>
+            <annotation>Table interne CONTRATREGFISC</annotation>
+          </field>
+          <field>
+            <name>DOSPOOL</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Syndication for the contract</comment>
+            <annotation>Table interne CONTRATPOOL</annotation>
+          </field>
+          <field>
+            <name>DOSTAUXCAL</name>
+            <type>NUMBER</type>
+            <comment>Calculated rate of contract at initial operation date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTAUX</name>
+            <type>NUMBER</type>
+            <comment>Negociated rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTXMARGE</name>
+            <type>NUMBER(5,2)</type>
+            <comment>Expected margin</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGINDEXABLE</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Revisable contract</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTYPEFINANCEMENT</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Type of financing</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEACTUALAN</name>
+            <type>NUMBER(3)</type>
+            <comment>Revised term in years</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEACTUALMOIS</name>
+            <type>NUMBER(3)</type>
+            <comment>Revised term in months</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDUREEACTUALJOUR</name>
+            <type>NUMBER(3)</type>
+            <comment>Revised term  in days</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTSIGN</name>
+            <type>NUMBER</type>
+            <comment>Amount when signed</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTCOMITE</name>
+            <type>NUMBER</type>
+            <comment>Amount agreed upon by committee</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTOUVERT</name>
+            <type>NUMBER</type>
+            <comment>Amount entered at creation of contract</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTPRODUCT</name>
+            <type>NUMBER</type>
+            <comment>Amount when put in service date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>TPGCODE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Product code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSSECTGESTION</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Management department</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSBAREME</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Schedule type external table codification</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTMARGE</name>
+            <type>NUMBER</type>
+            <comment>Amount of expected margin</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIDREFINANCE</name>
+            <type>NUMBER</type>
+            <comment>Refinancing Contract or file ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFINSTRUCT</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Type of structured financing</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTFORFAITRACHAT</name>
+            <type>NUMBER</type>
+            <comment>Lump sum added to financial outstanding</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPCTPENALITERACHAT</name>
+            <type>NUMBER</type>
+            <comment>Financial outstanding penalty percentage for early termination</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSUSGAAP</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>US GAAP code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTYPEPENALITERESIL</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Type of calculation of cancellation penalty</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTPENALITERESIL</name>
+            <type>NUMBER</type>
+            <comment>Lump sum for cancellation compensation</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPCTPENALITERESIL</name>
+            <type>NUMBER</type>
+            <comment>Rate to be applied for the early termination penalty</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>NAPCODE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Asset class</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PAYCODE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Country code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGRESTRUCT</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag contract has been restructured according to French GAAP standards</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTDEBRESTRUCT</name>
+            <type>DATE</type>
+            <comment>Start date of the restructuring of the contract (French GAP)</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTRANSFERABILITE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Transferability code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGCONFIDENTIEL</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Confidentiality enforced</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTAUXCALCACTUEL</name>
+            <type>NUMBER</type>
+            <comment>Effective calculated rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASEXERCICECRITERE</name>
+            <type>NUMBER(4)</type>
+            <comment>Valid fiscal year for IAS criteria</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASCLASSEMENT</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>IAS contract class</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASFLAGMICROCOUVERTURE</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag contract is microcovered</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASFLAGNATURESPECIFIQUE</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Asset is of a specific nature</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASFLAGLOCATIONFINALE</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Asset will be rented at contract termination</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASFLAGTRANSFERTFINAL</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Asset ownership transfer at termination of contract</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASDUREEECONOMIQUEAN</name>
+            <type>NUMBER(2)</type>
+            <comment>Asset's economic life span in years</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGVRAUTO</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Automatic invoicing of Residual value</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASDUREEECONOMIQUEMOIS</name>
+            <type>NUMBER(3)</type>
+            <comment>Asset's residual economic lifespan in months</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASDUREEECONOMIQUEJOUR</name>
+            <type>NUMBER(3)</type>
+            <comment>Asset's residual economic lifespan in days</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASMTVALEURINITIALE</name>
+            <type>NUMBER</type>
+            <comment>Asset's initial fair value</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIDLOCATIF</name>
+            <type>NUMBER</type>
+            <comment>Related Real estate Rent Contract or file ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTXACTUALISE</name>
+            <type>NUMBER</type>
+            <comment>Contract calculated actuarial rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASFLAGMAJCLASSEMENT</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag IAS classification can be updated</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASMEMOMAJCLASSEMENT</name>
+            <type>VARCHAR2(2000 CHAR)</type>
+            <comment>Memorandum to specify the reason class was forced</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGDOUTEUXCOMPROMIS</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag Bad debt</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTDOUTEUXCOMPROMIS</name>
+            <type>DATE</type>
+            <comment>Date of last tranfer into bad debt</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>TAUCODE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Rate code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASMARCHE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>IAS market code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASPRODUIT</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>IAS Product code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASTXMARCHE</name>
+            <type>NUMBER</type>
+            <comment>Market rate value</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASTOLERANCEMARCHE</name>
+            <type>NUMBER</type>
+            <comment>Market rate gap for market classification</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASTOLERANCEHORSMARCHE</name>
+            <type>NUMBER</type>
+            <comment>Market rate gap for irrevocable out of market classification</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASDECOTEINITIALE</name>
+            <type>NUMBER</type>
+            <comment>Initial Discount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIASINSTRUMENTFINANCIER</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Homogeneous category of financial hedging</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>CALID</name>
+            <type>NUMBER</type>
+            <comment>Calendar ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTENDCOMMITTEE</name>
+            <type>DATE</type>
+            <comment>End date for commitment</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSCOMMENT</name>
+            <type>VARCHAR2(500 CHAR)</type>
+            <comment>Comment on contract</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSEXTERNALREF</name>
+            <type>VARCHAR2(50 CHAR)</type>
+            <comment>External contract reference (DPRNUMERO from FO)</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSNETWORK</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Commercial network</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PAYCODESTATE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Region or state country code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PRECODESTATE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Region or state code</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PRETYPESTATE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Region or state type</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSVERSION</name>
+            <type>VARCHAR2(250 CHAR)</type>
+            <comment>Contract version</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PCRID</name>
+            <type>NUMBER</type>
+            <comment>Pricing criteria category identifier</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>PCRORDRE</name>
+            <type>NUMBER(10)</type>
+            <comment>Pricing criteria occurrence number</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSANNUALUSE</name>
+            <type>NUMBER</type>
+            <comment>Annual usage</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSUNITUSE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Unit of measurement</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPURCHASEUSE</name>
+            <type>NUMBER</type>
+            <comment>Purchase usage</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSEXTGRADE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Extension grade</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTEXCESSUSE</name>
+            <type>NUMBER</type>
+            <comment>Excess use cost</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTYPESUBVENTION</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Subvention type</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMFTYPE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Master facility type</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTXDISCOUNT</name>
+            <type>NUMBER</type>
+            <comment>Discount interest rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSCONTRACTTYPE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Contract type (succession or extension or etc)</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTPFA</name>
+            <type>NUMBER</type>
+            <comment>Project financing total amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPFDURATION</name>
+            <type>NUMBER</type>
+            <comment>Project financing total duration</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTPFLTV</name>
+            <type>NUMBER</type>
+            <comment>PF Loan contract amount real estate market value</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSWARANTDURATION</name>
+            <type>NUMBER</type>
+            <comment>Duration from begin to complete construction</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTGUARANTEE</name>
+            <type>NUMBER</type>
+            <comment>Guarantee amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTMATURITY</name>
+            <type>DATE</type>
+            <comment>Maturity date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTCOLCRELIMIT</name>
+            <type>NUMBER</type>
+            <comment>Collateral credit limit</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTSALCRELIMIT</name>
+            <type>NUMBER</type>
+            <comment>Sales credit limit</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTBLOCRELIMIT</name>
+            <type>NUMBER</type>
+            <comment>Strategic dealership block credit limit</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTIPD</name>
+            <type>DATE</type>
+            <comment>IPD</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSIDTEMPLATE</name>
+            <type>NUMBER</type>
+            <comment>Contract of file ID template</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTBALANCE</name>
+            <type>NUMBER</type>
+            <comment>Contract balance in real time</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTBALANCE</name>
+            <type>DATE</type>
+            <comment>Date of last calculation on contract balance</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSREGULATIONTYPE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Regulation type</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTXAPRINITIAL</name>
+            <type>NUMBER</type>
+            <comment>APR initial rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSTXAPRUPDATED</name>
+            <type>NUMBER</type>
+            <comment>APR updated rate</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTSCALEMIN</name>
+            <type>NUMBER</type>
+            <comment>Scale minimum amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTSCALEMAX</name>
+            <type>NUMBER</type>
+            <comment>Scale maximum amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGNOCONVERSION</name>
+            <type>NUMBER(1)</type>
+            <comment>Not eligible for conversion</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSACQUISSTATUS</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Status of acquis</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSSIRET</name>
+            <type>VARCHAR2(100 CHAR)</type>
+            <comment>Siret</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSASSETUSAGE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Asset usage (tusnom ASSETUSAGE)</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSFLAGBILLOWNERPREVALID</name>
+            <type>NUMBER(1)</type>
+            <comment>Flag bill owner prevalid</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSPCTRISKFUND</name>
+            <type>NUMBER</type>
+            <comment>Risk fund percent</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSMTNETAPPROVED</name>
+            <type>NUMBER</type>
+            <comment>Net approved balance</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSDTRATIFICATION</name>
+            <type>DATE</type>
+            <comment>Ratification date</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DOSGOODVALUE</name>
+            <type>VARCHAR2(15 CHAR)</type>
+            <comment>Good value on collection</comment>
+            <annotation></annotation>
+          </field>
+        </fields>
+      </table>
+      <table>
+        <name>DOSSIERIMMOBILIER</name>
+        <comment>This table contains the contracts which are real estate. It is an extension of DOSSIER.</comment>
+        <annotation></annotation>
+        <description-rtf>
+          {\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+          \viewkind4\uc1\pard\f0\fs20\b insert : \par
+          \b0 Thru UI according to user's rights, API contract boarding and WS\par
+          \b delete :\par
+          \b0 Thru UI according to user's rights\par
+          \b update : \par
+          \b0 Thru UI according to user's rights\par
+          }
+        </description-rtf>
+        <fields>
+          <field>
+            <name>DOSID</name>
+            <type>NUMBER</type>
+            <comment>Contract of file ID</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMZONE</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Geographical area</comment>
+            <annotation>TABLE interne CBIZONEGEO96</annotation>
+          </field>
+          <field>
+            <name>DIMNBSALARIE</name>
+            <type>NUMBER(6)</type>
+            <comment>Number of staff</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMPCTCAPITAL</name>
+            <type>NUMBER(5,2)</type>
+            <comment>Percentage of Capital held</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMBILANMF</name>
+            <type>NUMBER</type>
+            <comment>Balance in Million of the currency</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMCAMF</name>
+            <type>NUMBER</type>
+            <comment>Turnover in Millions</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMANCRITERE</name>
+            <type>NUMBER(4)</type>
+            <comment>Year of validity of criteria</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMMARGE</name>
+            <type>NUMBER</type>
+            <comment>Margin on contract</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMPOSCC</name>
+            <type>VARCHAR2(7 CHAR)</type>
+            <comment>Current account position</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMMTCC</name>
+            <type>NUMBER</type>
+            <comment>Current account amount</comment>
+            <annotation></annotation>
+          </field>
+          <field>
+            <name>DIMMEMOVR</name>
+            <type>VARCHAR2(2000 CHAR)</type>
+            <comment>Memo on Residual value calculation</comment>
+            <annotation></annotation>
+          </field>
+        </fields>
+      </table>
+    </tables>
+  </model>
+</physical>

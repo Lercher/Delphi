@@ -95,15 +95,18 @@ Namespace Delphi
         End Function
 
         Public Shared Function RichValues(owner As String, tablename As string, pk as IEnumerable(Of TableController.PKDef)) As RichtableDescription
-            Dim r = New RichtableDescription With {.owner = owner, .table = tablename}
-            if pk is Nothing then
+            Dim info = PhysicalModel.GetTableInfo(tablename)
+            Dim r = New RichtableDescription With {.owner = owner, .table = tablename, .pdmComment = info.Comment, .pdmAnnotation = info.Annotation}
+            If pk Is Nothing Then
                 r.values = Values(owner, tablename)
             Else
                 r.values = ValuesOf(owner, tablename, pk)
             end If
             r.metadata = Table.PointersAndLists(owner, tablename)
             r.columns = Table.Columns(owner, tablename)
+            PhysicalModel.ExtendColumns(tablename, r.columns)
             r.pk = Table.PrimaryKeyColumns(owner, tablename)
+            r.description = Table.Description(owner, tablename)
             Dim md = JsonConvert.SerializeObject(r.metadata)
             Dim FKs = JsonConvert.DeserializeObject(of fk())(md)
             Dim qy =
@@ -139,6 +142,9 @@ Namespace Delphi
         Public Class RichtableDescription
             Public Property owner As String
             Public Property table As String
+            Public Property description As String
+            Public Property pdmComment As String
+            Public Property pdmAnnotation As String
             Public Property values As DataTable
             Public Property metadata As DataTable
             Public Property columns As DataTable

@@ -2,6 +2,8 @@
     Inherits BaseController
 
     Function [Get](id As String) As DataTable
-        Return Delphi.Table.Names(id)
+        Dim dt = Delphi.Table.Names(id)
+        PhysicalModel.ExtendTables(dt)
+        Return dt
     End Function
 End Class

@@ -1,6 +1,7 @@
 ﻿<div>
-    <h3>{{oracle.table}} Single Item &ndash; Data</h3>
-    <p ng-repeat="t in tables | filter: {NAME: oracle.table}:true" ng-bind="t.DESCRIPTION"></p>
+    <h3>{{oracle.table}} ({{oracle.owner}}) single item &ndash; data</h3>
+    <p ng-bind="oracle.description" ng-show="oracle.description != '==='" title="table comment in database"></p>
+    <p ng-bind="oracle.pdmComment" ng-show="oracle.description != oracle.pdmComment" title="current description from physical model file"></p>
     <p>
         <label>Find:</label>&nbsp;<input ng-model="filter.column" />
     </p>
@@ -9,17 +10,19 @@
             <th>PK</th>
             <th>Column name</th>
             <th>Value</th>
+            <th>Type</th>
             <th>Link</th>
         </tr>
         <tr ng-repeat="(n, v) in r" ng-switch="isLink(n, v)" ng-show="n.toLowerCase().indexOf(filter.column||'')>=0">
             <td>
-                <span ng-show="oracle.pk.indexOf(n)>=0">&#10140;</span>
+                <span ng-show="oracle.pk.indexOf(n)>=0" title="primary key column">&#10140;</span>
             </td>
             <td style="vertical-align: top;">
                 <div ng-bind="n"></div>
                 <div style="font-size: 66%;" ng-bind="descriptionOf(n)"></div>
             </td>
             <td ng-bind="v"></td>
+            <td ng-bind="typeOf(n)"></td>
             <td>
                 <div ng-switch-when="true" ng-repeat="fk in linksof(n)" style="font-size: 66%;">
                     <a title="{{fk.key}}" ng-click="show.follow(r, fk, 'forward')">&#10140;&nbsp;{{fk.destination}}</a>
@@ -27,4 +30,8 @@
             </td>
         </tr>
     </table>
+    <p>
+        <div>Annotation from physical model file:</div>
+        <pre ng-bind="oracle.pdmAnnotation"></pre>
+    </p>
 </div>
