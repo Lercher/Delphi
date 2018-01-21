@@ -200,6 +200,7 @@
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="Model\TransformPhysicalModel.xslt" />
+    <EmbeddedResource Include="Model\TransformConceptualModel.xslt" />
     <Content Include="wwwroot\Rule.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<conceptual>
+  <model>
+    <name>CASSIOPEE V3</name>
+    <entities>
+      <entity>
+        <name>DOSSIERIMMOBILIER</name>
+        <comment>This table contains the contracts which are real estate. It is an extension of DOSSIER.</comment>
+        <annotation></annotation>
+        <description-rtf>{\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+\viewkind4\uc1\pard\f0\fs20\b insert : \par
+\b0 Thru UI according to user's rights, API contract boarding and WS\par
+\b delete :\par
+\b0 Thru UI according to user's rights\par
+\b update : \par
+\b0 Thru UI according to user's rights\par
+}
+</description-rtf>
+        <attributes>
+          <attribute>
+            <item>
+              <name>DIMZONE</name>
+              <type>VA7</type>
+              <comment>Geographical area</comment>
+              <annotation>TABLE interne CBIZONEGEO96</annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMNBSALARIE</name>
+              <type>N6</type>
+              <comment>Number of staff</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMPCTCAPITAL</name>
+              <type>N5,2</type>
+              <comment>Percentage of Capital held</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMBILANMF</name>
+              <type>N</type>
+              <comment>Balance in Million of the currency</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMCAMF</name>
+              <type>N</type>
+              <comment>Turnover in Millions</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMANCRITERE</name>
+              <type>N4</type>
+              <comment>Year of validity of criteria</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMMARGE</name>
+              <type>N</type>
+              <comment>Margin on contract</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMPOSCC</name>
+              <type>VA7</type>
+              <comment>Current account position</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMMTCC</name>
+              <type>N</type>
+              <comment>Current account amount</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DIMMEMOVR</name>
+              <type>VA2000</type>
+              <comment>Memo on Residual value calculation</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+        </attributes>
+      </entity>
+      <entity>
+        <name>DOSSIERMOBILIER</name>
+        <comment>This table contains the contracts which are hire purchase contracts. It is an extension of DOSSIER.</comment>
+        <annotation></annotation>
+        <description-rtf>{\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+\viewkind4\uc1\pard\f0\fs20\b insert : \par
+\b0 Thru UI according to user's rights, API contract boarding and WS\par
+\b delete :\par
+\b0 Thru UI according to user's rights\par
+\b update : \par
+\b0 Thru UI according to user's rights\par
+}
+</description-rtf>
+        <attributes>
+          <attribute>
+            <item>
+              <name>DOSFLAGGRPRUBRIQUE</name>
+              <type>BL</type>
+              <comment>Flag Misc elements are to be grouped with regular payment element</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+        </attributes>
+      </entity>
+      <entity>
+        <name>DOSSIERCREDIT</name>
+        <comment>This table contains the contracts which are financial loans. It is an extension of DOSSIER.</comment>
+        <annotation></annotation>
+        <description-rtf>{\rtf1\ansi\ansicpg1252\deff0\deflang1036{\fonttbl{\f0\fnil\fcharset0 Times New Roman;}}
+\viewkind4\uc1\pard\f0\fs20\b insert : \par
+\b0 Thru UI according to user's rights, API contract boarding and WS\par
+\b delete :\par
+\b0 Thru UI according to user's rights\par
+\b update : \par
+\b0 Thru UI according to user's rights\par
+}
+</description-rtf>
+        <attributes>
+          <attribute>
+            <item>
+              <name>DCRTYPE</name>
+              <type>VA7</type>
+              <comment>Type of credit</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRCLASSE</name>
+              <type>VA7</type>
+              <comment>Loan class</comment>
+              <annotation>Table interne CREDITCLASSE</annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGELIGBDF</name>
+              <type>BL</type>
+              <comment>Bank of France eligibility</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGELIGIEOM</name>
+              <type>BL</type>
+              <comment>IEOM eligibility</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGELIGIEDOM</name>
+              <type>BL</type>
+              <comment>IEDOM eligibility</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGELIGMH</name>
+              <type>BL</type>
+              <comment>Mortgage market eligibility</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRBAFI</name>
+              <type>VA7</type>
+              <comment>BAFI classification</comment>
+              <annotation>Table interne EMPRBAFI</annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGPRETREVOCABLE</name>
+              <type>BL</type>
+              <comment>Flag Loan call be called off</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRDUREEMOISPREAVIS</name>
+              <type>N3</type>
+              <comment>Delay in months of revocability notice</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRPCTTIRAGEPREVU</name>
+              <type>N</type>
+              <comment>Expected payment rate</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGCONVERTIBILITE</name>
+              <type>BL</type>
+              <comment>Flag of convertibility</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGTACITERECOND</name>
+              <type>BL</type>
+              <comment>Flag Renewable through tacit consent</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRFLAGREVOLVING</name>
+              <type>BL</type>
+              <comment>Flag Revolving credit</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRDTSTARTREVOLVING</name>
+              <type>D</type>
+              <comment>Start date revolving</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+          <attribute>
+            <item>
+              <name>DCRDTENDREVOLVING</name>
+              <type>D</type>
+              <comment>End date revolving</comment>
+              <annotation></annotation>
+            </item>
+          </attribute>
+        </attributes>
+      </entity>
+    </entities>
+  </model>
+</conceptual>
