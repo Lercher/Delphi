@@ -18,8 +18,13 @@ Public Module MainModule
         Console.WriteLine()
         Console.WriteLine(Console.Title)
 
-        Console.WriteLine("Loading physical model files from: {0}", Query.Connection.Modeldirectory)
-        Console.WriteLine(Common.PhysicalModel.LoadAllPdmFrom(Query.Connection.Modeldirectory))
+        Try
+            Console.WriteLine("Loading physical model files from: {0}", Query.Connection.Modeldirectory)
+            Console.WriteLine(Common.PhysicalModel.LoadAllPdmFrom(Query.Connection.Modeldirectory))
+        Catch ex As Exception
+            Console.WriteLine(ex.Message)
+            Console.WriteLine("Physical model file ignored b/c of previous error")
+        End Try
 
         If Query.Connection.nocache Then
             Console.WriteLine("nocache option (-x) is set, skipping prepopulation of the PK/FK cache")
