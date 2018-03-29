@@ -50,7 +50,7 @@ Public Module MainModule
                 Loop Until String.IsNullOrEmpty(cmd)
             End Using
         Catch ex As TargetInvocationException
-            Console.WriteLine(ex.InnerException.Message)
+            Console.WriteLine("When opening {0}: {1}", url, ex.InnerException.Message)
             Console.Write("Press Enter to stop ... ")
             Console.ReadLine()
         End Try
